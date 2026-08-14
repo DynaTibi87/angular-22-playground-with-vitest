@@ -73,7 +73,7 @@ describe('Greeting', () => {
 
   it('should render the greeting from the input', () => {
     // Verify that the bound input value is interpolated into the template.
-    expect(greeting.nativeElement.textContent).toContain('Hello, Sample Name!');
+    expect(greeting.properties['innerHTML']).toBe('Hello, Sample Name!');
   });
 
   it('should update the greeting when the input changes', async () => {
@@ -82,7 +82,7 @@ describe('Greeting', () => {
     await fixture.whenStable();
 
     // Verify the template reflects the new input value.
-    expect(greeting.nativeElement.textContent).toContain('Hello, John Dough!');
+    expect(greeting.properties['innerHTML']).toContain('Hello, John Dough!');
   });
 
   it('should emit the greeted output when the button is clicked', () => {
