@@ -1,36 +1,8 @@
-import { Component, DebugElement, computed, signal } from '@angular/core';
+import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
-
-// A tiny component with a single text input.
-// It is defined here (instead of its own file) because it is really small
-// and only exists to exercise input-field behaviour in the tests below.
-@Component({
-  selector: 'app-name-field',
-  template: `
-    <label>
-      Name
-      <input
-        type="text"
-        data-testid="name-input"
-        [value]="name()"
-        (input)="onInput($event)"
-      />
-    </label>
-    <p data-testid="preview" [textContent]="greeting()"></p>
-  `,
-})
-class NameField {
-  readonly name = signal('');
-  readonly greeting = computed(() => `Hello, ${this.name()}!`);
-
-  onInput(event: Event): void {
-    if (event.target instanceof HTMLInputElement) {
-      this.name.set(event.target.value);
-    }
-  }
-}
+import { NameField } from './name-field';
 
 describe('NameField', () => {
   let fixture: ComponentFixture<NameField>;
