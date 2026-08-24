@@ -81,7 +81,7 @@ describe('QuotePanel', () => {
     // Advance almost to the delay, but not quite. The async variant also
     // flushes any microtasks the stream queues along the way.
     await vi.advanceTimersByTimeAsync(QuoteService.DELAY_MS - 1);
-    await fixture.whenStable();
+    // await fixture.whenStable();
 
     // Still loading: one millisecond short of the scheduled emission.
     expect(componentInstance.loading()).toBe(true);
