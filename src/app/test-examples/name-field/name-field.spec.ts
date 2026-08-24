@@ -27,7 +27,7 @@ class NameField {
 
   onInput(event: Event): void {
     if (event.target instanceof HTMLInputElement) {
-      this.name.set((event.target as HTMLInputElement).value);
+      this.name.set(event.target.value);
     }
   }
 }
@@ -39,12 +39,13 @@ describe('NameField', () => {
   let input: DebugElement;
   let preview: DebugElement;
 
-  // Simulates typing into the input without touching `nativeElement`.
-  // `triggerEventHandler` invokes the bound `(input)` handler directly,
-  // so we hand it a minimal event shaped like the one the DOM would emit.
+  // Helper function to simulate typing into the input field.
   const typeInput = async (value: string) => {
-    input.triggerEventHandler('input', { target: { value } });
-    await fixture.whenStable();
+    if (input.nativeElement instanceof HTMLInputElement) {
+      input.nativeElement.value = value;
+      input.nativeElement.dispatchEvent(new Event('input'));
+      await fixture.whenStable();
+    }
   };
 
   beforeEach(async () => {
