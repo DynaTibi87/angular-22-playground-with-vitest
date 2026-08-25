@@ -26,10 +26,6 @@ describe('FeatureTogglePanel', () => {
     debugElement.query(By.css('[data-testid="error"]'));
 
   beforeEach(async () => {
-    // `FeatureFlagService` is `providedIn: 'root'`, so the TestBed supplies the
-    // real instance automatically. We spy on that real instance rather than
-    // swapping in a fake - a spy wraps the existing method, so we keep the
-    // real object while gaining call tracking and (optionally) stubbing.
     TestBed.configureTestingModule({
       imports: [FeatureTogglePanel],
     });
