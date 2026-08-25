@@ -5,13 +5,22 @@ import { NameField } from '../test-examples/name-field/name-field';
 import { QuotePanel } from '../test-examples/async-quote/quote-panel';
 import { MessagePanel } from '../test-examples/service-injection/message-panel';
 import { UserPanel } from '../test-examples/http-user/user-panel';
+import { FeatureTogglePanel } from '../test-examples/spy-feature-toggle/feature-toggle-panel';
 
 // Aggregates every test-example component into a single, browsable page.
 // Each example is rendered live inside a labeled "widget" card and the cards
 // flow into a responsive CSS grid.
 @Component({
   selector: 'app-test-guide',
-  imports: [Counter, Greeting, NameField, QuotePanel, MessagePanel, UserPanel],
+  imports: [
+    Counter,
+    Greeting,
+    NameField,
+    QuotePanel,
+    MessagePanel,
+    UserPanel,
+    FeatureTogglePanel,
+  ],
   template: `
     <header class="page-header">
       <h1>Test Guide</h1>
@@ -81,6 +90,16 @@ import { UserPanel } from '../test-examples/http-user/user-panel';
         </p>
         <div class="widget__body">
           <app-user-panel />
+        </div>
+      </article>
+
+      <article class="widget">
+        <h2 class="widget__title">Feature toggle spying</h2>
+        <p class="widget__desc">
+          Service interactions verified and stubbed with Vitest spies.
+        </p>
+        <div class="widget__body">
+          <app-feature-toggle-panel />
         </div>
       </article>
     </section>
