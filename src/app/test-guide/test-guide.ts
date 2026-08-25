@@ -6,6 +6,7 @@ import { QuotePanel } from '../test-examples/async-quote/quote-panel';
 import { MessagePanel } from '../test-examples/service-injection/message-panel';
 import { UserPanel } from '../test-examples/http-user/user-panel';
 import { FeatureTogglePanel } from '../test-examples/spy-feature-toggle/feature-toggle-panel';
+import { NavPanel } from '../test-examples/router-navigation/nav-panel';
 
 // Aggregates every test-example component into a single, browsable page.
 // Each example is rendered live inside a labeled "widget" card and the cards
@@ -20,6 +21,7 @@ import { FeatureTogglePanel } from '../test-examples/spy-feature-toggle/feature-
     MessagePanel,
     UserPanel,
     FeatureTogglePanel,
+    NavPanel,
   ],
   template: `
     <header class="page-header">
@@ -100,6 +102,17 @@ import { FeatureTogglePanel } from '../test-examples/spy-feature-toggle/feature-
         </p>
         <div class="widget__body">
           <app-feature-toggle-panel />
+        </div>
+      </article>
+
+      <article class="widget">
+        <h2 class="widget__title">Router navigation</h2>
+        <p class="widget__desc">
+          RouterLink and programmatic navigation tested with
+          RouterTestingHarness.
+        </p>
+        <div class="widget__body">
+          <app-nav-panel />
         </div>
       </article>
     </section>
