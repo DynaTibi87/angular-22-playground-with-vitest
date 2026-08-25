@@ -39,45 +39,49 @@ describe('Counter', () => {
     await fixture.whenStable();
   });
 
-  it('should render', () => {
-    // Verify that Angular successfully created the component.
-    expect(fixture.componentInstance).toBeTruthy();
+  describe('rendering', () => {
+    it('should render', () => {
+      // Verify that Angular successfully created the component.
+      expect(fixture.componentInstance).toBeTruthy();
+    });
+
+    it('should render elements', () => {
+      // Verify that the elements needed for the tests are present in the template.
+      expect(count).toBeTruthy();
+      expect(incrementButton).toBeTruthy()
+      expect(decrementButton).toBeTruthy()
+    })
+
+    it('should render the initial count', () => {
+      // Verify that the signal's initial value is correct and rendered.
+      expect(componentInstance.count()).toBe(0)
+      expect(count.nativeElement.textContent).toContain('Count: 0');
+    });
   });
 
-  it('should render elements', () => {
-    // Verify that the elements needed for the tests are present in the template.
-    expect(count).toBeTruthy();
-    expect(incrementButton).toBeTruthy()
-    expect(decrementButton).toBeTruthy()
-  })
+  describe('interactions', () => {
+    it('should increment the count', async () => {
+      // Simulate the user clicking the Increment button.
+      incrementButton.nativeElement.click();
 
-  it('should render the initial count', () => {
-    // Verify that the signal's initial value is correct and rendered.
-    expect(componentInstance.count()).toBe(0)
-    expect(count.nativeElement.textContent).toContain('Count: 0');
-  });
+      // Wait until Angular updates the template.
+      await fixture.whenStable();
 
-  it('should increment the count', async () => {
-    // Simulate the user clicking the Increment button.
-    incrementButton.nativeElement.click();
+      // Verify that the updated signal value is updated and rendered.
+      expect(componentInstance.count()).toBe(1)
+      expect(count.nativeElement.textContent).toContain('Count: 1');
+    });
 
-    // Wait until Angular updates the template.
-    await fixture.whenStable();
+    it('should decrement the count', async () => {
+      // Simulate the user clicking the Decrement button.
+      decrementButton.nativeElement.click();
 
-    // Verify that the updated signal value is updated and rendered.
-    expect(componentInstance.count()).toBe(1)
-    expect(count.nativeElement.textContent).toContain('Count: 1');
-  });
+      // Wait until Angular updates the template.
+      await fixture.whenStable();
 
-  it('should decrement the count', async () => {
-    // Simulate the user clicking the Decrement button.
-    decrementButton.nativeElement.click();
-
-    // Wait until Angular updates the template.
-    await fixture.whenStable();
-
-    // Verify that the updated signal value is rendered.
-    expect(componentInstance.count()).toBe(-1)
-    expect(count.nativeElement.textContent).toContain('Count: -1');
+      // Verify that the updated signal value is rendered.
+      expect(componentInstance.count()).toBe(-1)
+      expect(count.nativeElement.textContent).toContain('Count: -1');
+    });
   });
 });
