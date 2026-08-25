@@ -99,16 +99,36 @@ describe('MessagePanel', () => {
     });
   });
 
-  it('should update the message when the button is clicked', async () => {
-    updateButton.nativeElement.click();
+  it('should toggle between the component and service messages on each click', async () => {
+    const service = TestBed.inject(MessageService);
 
+    // First click: the component-owned message wins, and the service stamps
+    // the name of the method that performed the update onto the value.
+    updateButton.nativeElement.click();
     await fixture.whenStable();
 
-    // The component method delegates to the service's public method.
-    const service = TestBed.inject(MessageService);
-    expect(service.message()).toBe('Updated from the component!');
+    expect(service.message()).toContain(MessagePanel.COMPONENT_MESSAGE);
+    expect(service.message()).toContain('toggleMessage');
     expect(message.properties['innerHTML']).toContain(
-      'Updated from the component!',
+      MessagePanel.COMPONENT_MESSAGE,
     );
+    expect(message.properties['innerHTML']).toContain('toggleMessage');
+
+    // Second click: the service-owned message wins, still annotated by the
+    // service with the method name.
+    updateButton.nativeElement.click();
+    await fixture.whenStable();
+
+    expect(service.message()).toContain(MessageService.SERVICE_MESSAGE);
+    expect(service.message()).toContain('toggleMessage');
+    expect(message.properties['innerHTML']).toContain(
+      MessageService.SERVICE_MESSAGE,
+    );
+
+    // Third click: back to the component-owned message.
+    updateButton.nativeElement.click();
+    await fixture.whenStable();
+
+    expect(service.message()).toContain(MessagePanel.COMPONENT_MESSAGE);
   });
 });

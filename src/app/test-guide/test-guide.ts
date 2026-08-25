@@ -33,6 +33,12 @@ import { MessagePanel } from '../test-examples/service-injection/message-panel';
         <p class="widget__desc">Required input plus an output event.</p>
         <div class="widget__body">
           <app-greeting [name]="greetingName()" (greeted)="onGreeted($event)" />
+          <p class="widget__note">
+            <code>name</code> (input signal) = “{{ greetingName() }}”
+          </p>
+          <button type="button" class="widget__action" (click)="shuffleName()">
+            Shuffle name
+          </button>
           @if (lastGreeting()) {
             <p class="widget__note">Last emitted: “{{ lastGreeting() }}”</p>
           }
@@ -143,16 +149,52 @@ import { MessagePanel } from '../test-examples/service-injection/message-panel';
       font-size: 0.8rem;
       color: #3e4c59;
     }
+
+    .widget__note code {
+      padding: 0.05rem 0.3rem;
+      border-radius: 4px;
+      background: #eef2f7;
+      font-size: 0.78rem;
+    }
+
+    .widget__action {
+      margin-top: 0.5rem;
+      align-self: flex-start;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid #cbd2d9;
+      border-radius: 6px;
+      background: #f5f7fa;
+      color: #1f2933;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .widget__action:hover {
+      background: #e4e7eb;
+    }
   `,
 })
 export class TestGuide {
-  // The Greeting component declares a required input, so we feed it a value.
-  readonly greetingName = signal('Jeremiah');
+  // Candidate names for the Greeting component's required input.
+  private readonly nameOptions = ['Ada', 'Grace', 'Alan', 'Linus', 'Margaret'] as const;
+
+  // The Greeting component declares a required input, so we feed it a value
+  // chosen at random from the options above.
+  readonly greetingName = signal(this.pickRandomName());
 
   // Capture the Greeting component's output so we can surface it in the card.
   readonly lastGreeting = signal('');
 
+  shuffleName(): void {
+    this.greetingName.set(this.pickRandomName());
+  }
+
   onGreeted(message: string): void {
     this.lastGreeting.set(message);
+  }
+
+  private pickRandomName(): string {
+    const index = Math.floor(Math.random() * this.nameOptions.length);
+    return this.nameOptions[index];
   }
 }
