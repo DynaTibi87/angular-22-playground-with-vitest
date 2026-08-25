@@ -4,7 +4,7 @@ import { FeatureFlagService, Variant } from './feature-flag.service';
 @Component({
   selector: 'app-feature-toggle-panel',
   template: `
-    <h1>Feature toggle</h1>
+    <h3>Feature toggle</h3>
 
     <p data-testid="status">
       Beta feature: {{ enabled() ? 'enabled' : 'disabled' }}

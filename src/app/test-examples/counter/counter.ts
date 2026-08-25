@@ -3,7 +3,7 @@ import { Component, signal } from '@angular/core';
 @Component({
   selector: 'app-counter',
   template: `
-    <h1>Counter</h1>
+    <h3>Counter</h3>
 
     <button type="button" data-testid="decrement" (click)="decrement()">
       -

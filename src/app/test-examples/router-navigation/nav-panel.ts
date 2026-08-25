@@ -11,14 +11,8 @@ export type View = 'overview' | 'details' | 'settings';
   selector: 'app-nav-panel',
   imports: [RouterLink],
   template: `
-    <h1>Router navigation</h1>
+    <h3>Router navigation</h3>
 
-    <!--
-      Declarative navigation. Binding routerLink to an empty array keeps the
-      current path and only swaps the query params, so this widget never leaves
-      the page it is embedded in. RouterLink also renders a real href we can
-      assert on.
-    -->
     <nav data-testid="nav">
       @for (view of views; track view) {
         <a
@@ -32,7 +26,6 @@ export type View = 'overview' | 'details' | 'settings';
       }
     </nav>
 
-    <!-- Imperative navigation through the injected Router. -->
     <button type="button" data-testid="go-settings" (click)="goToSettings()">
       Go to settings (programmatic)
     </button>
@@ -55,7 +48,6 @@ export type View = 'overview' | 'details' | 'settings';
   `,
 })
 export class NavPanel {
-  // Exposed as statics so tests can assert against the same source of truth.
   static readonly VIEWS: readonly View[] = ['overview', 'details', 'settings'];
   static readonly DEFAULT_VIEW: View = 'overview';
 
@@ -64,15 +56,11 @@ export class NavPanel {
 
   readonly views = NavPanel.VIEWS;
 
-  // Reactively read the `view` query param from the activated route. Turning
-  // the observable into a signal lets the template (and `activeView`) update
-  // automatically after every navigation.
   private readonly viewParam = toSignal(
     this.route.queryParamMap.pipe(map((params) => params.get('view'))),
     { initialValue: null },
   );
 
-  // Falls back to the default when the URL has no (or an unknown) view param.
   readonly activeView = computed<View>(() => {
     const value = this.viewParam();
     return NavPanel.VIEWS.includes(value as View)
@@ -85,5 +73,3 @@ export class NavPanel {
     this.router.navigate([], { queryParams: { view: 'settings' } });
   }
 }
-
-

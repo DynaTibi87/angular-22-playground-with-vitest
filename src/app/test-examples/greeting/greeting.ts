@@ -3,7 +3,7 @@ import { Component, input, output } from '@angular/core';
 @Component({
   selector: 'app-greeting',
   template: `
-    <h1 data-testid="greeting">Hello, {{ name() }}!</h1>
+    <h3 data-testid="greeting">Hello, {{ name() }}!</h3>
 
     <button type="button" data-testid="greet" (click)="greet()">
       Say hello

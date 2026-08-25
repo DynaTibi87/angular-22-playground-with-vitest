@@ -153,8 +153,10 @@ import { NavPanel } from '../test-examples/router-navigation/nav-panel';
     .widget-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
-      align-items: start;
+      column-gap: 1.5rem;
+      row-gap: 2rem;
+      align-items: stretch;
+      padding-bottom: 2rem;
     }
 
     .widget {
@@ -185,6 +187,34 @@ import { NavPanel } from '../test-examples/router-navigation/nav-panel';
       margin-top: 0.5rem;
       padding-top: 0.75rem;
       border-top: 1px dashed #e4e7eb;
+      flex: 1;
+    }
+
+    /*
+      The example components have no host styles, so they default to
+      display: inline. An inline host does not establish block height for its
+      block-level template content, which makes each card under-measure its
+      height and paint over the row below. Forcing the embedded hosts to block
+      lets their content contribute proper height and stops the overlap.
+    */
+    .widget__body :is(
+        app-counter,
+        app-greeting,
+        app-name-field,
+        app-quote-panel,
+        app-message-panel,
+        app-user-panel,
+        app-feature-toggle-panel,
+        app-nav-panel
+      ) {
+      display: block;
+    }
+
+    /* Examples embed their own heading; keep it modest inside the card. */
+    .widget__body h3 {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+      color: #3e4c59;
     }
 
     .widget__note {
