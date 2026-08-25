@@ -3,8 +3,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 
-// The set of "views" this panel can show. Each one maps to a `?view=` query
-// param, so switching views is a real router navigation - not just local state.
 export type View = 'overview' | 'details' | 'settings';
 
 @Component({

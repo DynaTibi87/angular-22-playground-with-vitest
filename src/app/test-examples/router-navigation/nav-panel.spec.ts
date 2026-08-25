@@ -14,13 +14,13 @@ describe('NavPanel (routing)', () => {
   // Re-query DOM nodes on demand: the rendered content changes after every
   // navigation, so grabbing fresh references avoids stale elements.
   const linkTo = (view: string): DebugElement =>
-    harness.fixture.debugElement.query(
-      By.css(`[data-testid="link-${view}"]`),
-    );
+    harness.fixture.debugElement.query(By.css(`[data-testid="link-${view}"]`));
+
   const activeText = (): string =>
     harness.fixture.debugElement
       .query(By.css('[data-testid="active"]'))
       .nativeElement.textContent.trim();
+
   const viewText = (): string =>
     harness.fixture.debugElement
       .query(By.css('[data-testid="view"]'))
@@ -31,9 +31,7 @@ describe('NavPanel (routing)', () => {
     // component under test is wired to a route so navigation actually renders
     // it through a router outlet, just like in the running app.
     TestBed.configureTestingModule({
-      providers: [
-        provideRouter([{ path: 'panel', component: NavPanel }]),
-      ],
+      providers: [provideRouter([{ path: 'panel', component: NavPanel }])],
     });
 
     location = TestBed.inject(Location);
@@ -107,9 +105,6 @@ describe('NavPanel (routing)', () => {
     await harness.navigateByUrl('/panel?view=settings', NavPanel);
 
     expect(linkTo('settings').nativeElement.classList).toContain('active');
-    expect(linkTo('overview').nativeElement.classList).not.toContain(
-      'active',
-    );
+    expect(linkTo('overview').nativeElement.classList).not.toContain('active');
   });
 });
-
