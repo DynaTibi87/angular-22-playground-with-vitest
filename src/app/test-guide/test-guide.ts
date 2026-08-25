@@ -4,13 +4,14 @@ import { Greeting } from '../test-examples/greeting/greeting';
 import { NameField } from '../test-examples/name-field/name-field';
 import { QuotePanel } from '../test-examples/async-quote/quote-panel';
 import { MessagePanel } from '../test-examples/service-injection/message-panel';
+import { UserPanel } from '../test-examples/http-user/user-panel';
 
 // Aggregates every test-example component into a single, browsable page.
 // Each example is rendered live inside a labeled "widget" card and the cards
 // flow into a responsive CSS grid.
 @Component({
   selector: 'app-test-guide',
-  imports: [Counter, Greeting, NameField, QuotePanel, MessagePanel],
+  imports: [Counter, Greeting, NameField, QuotePanel, MessagePanel, UserPanel],
   template: `
     <header class="page-header">
       <h1>Test Guide</h1>
@@ -70,6 +71,16 @@ import { MessagePanel } from '../test-examples/service-injection/message-panel';
         </p>
         <div class="widget__body">
           <app-message-panel />
+        </div>
+      </article>
+
+      <article class="widget">
+        <h2 class="widget__title">HTTP user lookup</h2>
+        <p class="widget__desc">
+          HttpClient request tested with HttpTestingController.
+        </p>
+        <div class="widget__body">
+          <app-user-panel />
         </div>
       </article>
     </section>
@@ -176,7 +187,13 @@ import { MessagePanel } from '../test-examples/service-injection/message-panel';
 })
 export class TestGuide {
   // Candidate names for the Greeting component's required input.
-  private readonly nameOptions = ['Ada', 'Grace', 'Alan', 'Linus', 'Margaret'] as const;
+  private readonly nameOptions = [
+    'Ada',
+    'Grace',
+    'Alan',
+    'Linus',
+    'Margaret',
+  ] as const;
 
   // The Greeting component declares a required input, so we feed it a value
   // chosen at random from the options above.
