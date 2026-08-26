@@ -8,6 +8,7 @@ import { UserPanel } from '../test-examples/http-user/user-panel';
 import { FeatureTogglePanel } from '../test-examples/spy-feature-toggle/feature-toggle-panel';
 import { NavPanel } from '../test-examples/router-navigation/nav-panel';
 import { CartPanel } from '../test-examples/cart/cart-panel';
+import { Highlight } from '../test-examples/highlight-directive/highlight';
 import {
   ProfileCard,
   Profile,
@@ -28,6 +29,7 @@ import {
     FeatureTogglePanel,
     NavPanel,
     CartPanel,
+    Highlight,
     ProfileCard,
   ],
   template: `
@@ -140,6 +142,31 @@ import {
         </p>
         <div class="widget__body">
           <app-profile-card [profile]="profile()" />
+        </div>
+      </article>
+
+      <article class="widget">
+        <h2 class="widget__title">Highlight directive</h2>
+        <p class="widget__desc">
+          An attribute directive tested through a host component.
+        </p>
+        <div class="widget__body">
+          <p class="highlight-demo" appHighlight="skyblue">
+            Static color (<code>appHighlight="skyblue"</code>)
+          </p>
+          <p class="highlight-demo" [appHighlight]="highlightColor()">
+            Bound color (<code>[appHighlight]</code> = “{{ highlightColor() }}”)
+          </p>
+          <p class="highlight-demo" appHighlight>
+            No value → falls back to the default color
+          </p>
+          <button
+            type="button"
+            class="widget__action"
+            (click)="shuffleHighlight()"
+          >
+            Shuffle bound color
+          </button>
         </div>
       </article>
     </section>
@@ -288,6 +315,23 @@ import {
     .widget__action:hover {
       background: #e4e7eb;
     }
+
+    /* Give the Highlight directive demo lines a little breathing room so the
+       painted background is easy to see. */
+    .highlight-demo {
+      margin: 0 0 0.5rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: #1f2933;
+    }
+
+    .highlight-demo code {
+      padding: 0.05rem 0.3rem;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.6);
+      font-size: 0.78rem;
+    }
   `,
 })
 export class TestGuide {
@@ -313,8 +357,25 @@ export class TestGuide {
     role: 'Engineer',
   });
 
+  // Candidate colors for the Highlight directive's bound `appHighlight` input.
+  private readonly highlightColors = [
+    'cyan',
+    'lightgreen',
+    'gold',
+    'salmon',
+    'violet',
+  ] as const;
+
+  // Drives the `[appHighlight]` binding in the Highlight directive widget.
+  readonly highlightColor = signal<string>(this.highlightColors[0]);
+
   shuffleName(): void {
     this.greetingName.set(this.pickRandomName());
+  }
+
+  shuffleHighlight(): void {
+    const index = Math.floor(Math.random() * this.highlightColors.length);
+    this.highlightColor.set(this.highlightColors[index]);
   }
 
   onGreeted(message: string): void {
