@@ -83,6 +83,16 @@ import {
       </article>
 
       <article class="widget">
+        <h2 class="widget__title">HTTP user</h2>
+        <p class="widget__desc">
+          HttpClient request tested with a mocked backend.
+        </p>
+        <div class="widget__body">
+          <app-user-panel />
+        </div>
+      </article>
+
+      <article class="widget">
         <h2 class="widget__title">Service injection</h2>
         <p class="widget__desc">
           Shared signal state through an injected service.
