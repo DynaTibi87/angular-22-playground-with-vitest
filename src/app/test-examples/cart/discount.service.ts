@@ -18,4 +18,3 @@ export class DiscountService {
       : 0;
   }
 }
-

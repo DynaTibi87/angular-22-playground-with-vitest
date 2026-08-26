@@ -9,10 +9,7 @@
     "importHelpers": true,
     "target": "es2022",
     "module": "preserve",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "strict": true,
@@ -40,8 +37,5 @@
     }
   ],
   "compileOnSave": false,
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }

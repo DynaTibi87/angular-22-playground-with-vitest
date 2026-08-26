@@ -28,7 +28,9 @@ import { CartService, Product } from './cart.service';
 
       <p data-testid="subtotal">Subtotal: \${{ cart.subtotal() }}</p>
       <p data-testid="discount">Discount: \${{ cart.discount() }}</p>
-      <p data-testid="total"><strong>Total: \${{ cart.total() }}</strong></p>
+      <p data-testid="total">
+        <strong>Total: \${{ cart.total() }}</strong>
+      </p>
 
       <button type="button" data-testid="clear" (click)="cart.clear()">
         Clear cart
@@ -49,5 +51,3 @@ export class CartPanel {
     { id: 'mse', name: 'Mouse', price: 25 },
   ];
 }
-
-

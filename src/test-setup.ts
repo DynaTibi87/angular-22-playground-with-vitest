@@ -10,5 +10,3 @@ import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
 // Initializes the Angular testing environment with zoneless change detection,
 // matching this application's runtime configuration.
 setupTestBed();
-
-

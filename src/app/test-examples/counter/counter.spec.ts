@@ -8,9 +8,9 @@ describe('Counter', () => {
   let fixture: ComponentFixture<Counter>;
   let debugElement: DebugElement;
   let componentInstance: Counter;
-  let count:DebugElement;
-  let incrementButton:DebugElement;
-  let decrementButton:DebugElement;
+  let count: DebugElement;
+  let incrementButton: DebugElement;
+  let decrementButton: DebugElement;
 
   beforeEach(async () => {
     // Configure Angular's testing environment.
@@ -48,13 +48,13 @@ describe('Counter', () => {
     it('should render elements', () => {
       // Verify that the elements needed for the tests are present in the template.
       expect(count).toBeTruthy();
-      expect(incrementButton).toBeTruthy()
-      expect(decrementButton).toBeTruthy()
-    })
+      expect(incrementButton).toBeTruthy();
+      expect(decrementButton).toBeTruthy();
+    });
 
     it('should render the initial count', () => {
       // Verify that the signal's initial value is correct and rendered.
-      expect(componentInstance.count()).toBe(0)
+      expect(componentInstance.count()).toBe(0);
       expect(count.nativeElement.textContent).toContain('Count: 0');
     });
   });
@@ -68,7 +68,7 @@ describe('Counter', () => {
       await fixture.whenStable();
 
       // Verify that the updated signal value is updated and rendered.
-      expect(componentInstance.count()).toBe(1)
+      expect(componentInstance.count()).toBe(1);
       expect(count.nativeElement.textContent).toContain('Count: 1');
     });
 
@@ -80,7 +80,7 @@ describe('Counter', () => {
       await fixture.whenStable();
 
       // Verify that the updated signal value is rendered.
-      expect(componentInstance.count()).toBe(-1)
+      expect(componentInstance.count()).toBe(-1);
       expect(count.nativeElement.textContent).toContain('Count: -1');
     });
   });

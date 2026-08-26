@@ -3,9 +3,7 @@
   "$schema": "../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "e2e/src",
-  "implicitDependencies": [
-    "angular-22-playground-with-vitest"
-  ],
+  "implicitDependencies": ["angular-22-playground-with-vitest"],
   "// targets": "to see all targets run: nx show project e2e --web",
   "targets": {}
 }

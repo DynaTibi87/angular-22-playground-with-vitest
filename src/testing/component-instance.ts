@@ -17,4 +17,3 @@ export function componentInstanceOf<T>(
 
   return instance;
 }
-
