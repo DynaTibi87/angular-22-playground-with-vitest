@@ -27,15 +27,11 @@ describe('CartService', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        // These services use `@Service()` without `providedIn: 'root'`, so we
-        // list them explicitly. HttpClient is needed because CartService
-        // injects it, even though these tests never hit the network.
-        providers: [
-          CartService,
-          DiscountService,
-          provideHttpClient(),
-          provideHttpClientTesting(),
-        ],
+        // The `@Service()` decorator auto-provides CartService and
+        // DiscountService, so neither needs to be listed here. We only wire up
+        // HttpClient because CartService injects it, even though these tests
+        // never hit the network.
+        providers: [provideHttpClient(), provideHttpClientTesting()],
       });
 
       service = TestBed.inject(CartService);
@@ -141,7 +137,6 @@ describe('CartService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         providers: [
-          CartService,
           // `useValue` swaps the real collaborator for our fake. The cart never
           // knows the difference - it just resolves the DiscountService token.
           { provide: DiscountService, useValue: fakeDiscount },
@@ -192,12 +187,7 @@ describe('CartService', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        providers: [
-          CartService,
-          DiscountService,
-          provideHttpClient(),
-          provideHttpClientTesting(),
-        ],
+        providers: [provideHttpClient(), provideHttpClientTesting()],
       });
 
       service = TestBed.inject(CartService);

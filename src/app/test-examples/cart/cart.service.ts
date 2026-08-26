@@ -9,7 +9,6 @@ export type Product = {
   price: number;
 };
 
-// A product plus how many of it the customer wants.
 export type CartLine = Product & { quantity: number };
 
 // A plain state-holding service: no component, no template. It owns the cart
@@ -89,4 +88,3 @@ export class CartService {
     return this.http.get<Product[]>(CartService.CATALOG_URL);
   }
 }
-
