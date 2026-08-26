@@ -103,7 +103,7 @@ describe('CartService', () => {
     });
 
     it('should reject a non-positive quantity', () => {
-      expect(() => service.add(keyboard, 0)).toThrowError(
+      expect(() => service.add(keyboard, 0)).toThrow(
         'Quantity must be a positive number.',
       );
       // The failed call must not have mutated any state.
@@ -245,5 +245,3 @@ describe('CartService', () => {
     });
   });
 });
-
-
