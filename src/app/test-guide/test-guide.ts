@@ -7,6 +7,10 @@ import { MessagePanel } from '../test-examples/service-injection/message-panel';
 import { UserPanel } from '../test-examples/http-user/user-panel';
 import { FeatureTogglePanel } from '../test-examples/spy-feature-toggle/feature-toggle-panel';
 import { NavPanel } from '../test-examples/router-navigation/nav-panel';
+import {
+  ProfileCard,
+  Profile,
+} from '../test-examples/nested-components/profile-card';
 
 // Aggregates every test-example component into a single, browsable page.
 // Each example is rendered live inside a labeled "widget" card and the cards
@@ -22,6 +26,7 @@ import { NavPanel } from '../test-examples/router-navigation/nav-panel';
     UserPanel,
     FeatureTogglePanel,
     NavPanel,
+    ProfileCard,
   ],
   template: `
     <header class="page-header">
@@ -113,6 +118,16 @@ import { NavPanel } from '../test-examples/router-navigation/nav-panel';
         </p>
         <div class="widget__body">
           <app-nav-panel />
+        </div>
+      </article>
+
+      <article class="widget">
+        <h2 class="widget__title">Nested components</h2>
+        <p class="widget__desc">
+          Parent wiring verified with a real child and a stubbed one.
+        </p>
+        <div class="widget__body">
+          <app-profile-card [profile]="profile()" />
         </div>
       </article>
     </section>
@@ -210,6 +225,20 @@ import { NavPanel } from '../test-examples/router-navigation/nav-panel';
       display: block;
     }
 
+    /* Show which component is which inside the nested-components card. */
+    .widget__body .tag {
+      margin: 0 0 0.5rem;
+      font-size: 0.78rem;
+      color: #7b8794;
+    }
+
+    .widget__body .tag code {
+      padding: 0.05rem 0.3rem;
+      border-radius: 4px;
+      background: #eef2f7;
+      color: #1f2933;
+    }
+
     /* Examples embed their own heading; keep it modest inside the card. */
     .widget__body h3 {
       margin: 0 0 0.5rem;
@@ -263,6 +292,12 @@ export class TestGuide {
 
   // Capture the Greeting component's output so we can surface it in the card.
   readonly lastGreeting = signal('');
+
+  // The ProfileCard component requires a profile, passed down to its children.
+  readonly profile = signal<Profile>({
+    name: 'Ada Lovelace',
+    role: 'Engineer',
+  });
 
   shuffleName(): void {
     this.greetingName.set(this.pickRandomName());
