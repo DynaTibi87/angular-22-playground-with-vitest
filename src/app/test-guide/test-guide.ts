@@ -7,6 +7,7 @@ import { MessagePanel } from '../test-examples/service-injection/message-panel';
 import { UserPanel } from '../test-examples/http-user/user-panel';
 import { FeatureTogglePanel } from '../test-examples/spy-feature-toggle/feature-toggle-panel';
 import { NavPanel } from '../test-examples/router-navigation/nav-panel';
+import { CartPanel } from '../test-examples/cart/cart-panel';
 import {
   ProfileCard,
   Profile,
@@ -26,6 +27,7 @@ import {
     UserPanel,
     FeatureTogglePanel,
     NavPanel,
+    CartPanel,
     ProfileCard,
   ],
   template: `
@@ -91,17 +93,7 @@ import {
       </article>
 
       <article class="widget">
-        <h2 class="widget__title">HTTP user lookup</h2>
-        <p class="widget__desc">
-          HttpClient request tested with HttpTestingController.
-        </p>
-        <div class="widget__body">
-          <app-user-panel />
-        </div>
-      </article>
-
-      <article class="widget">
-        <h2 class="widget__title">Feature toggle spying</h2>
+        <h2 class="widget__title">Nested components</h2>
         <p class="widget__desc">
           Service interactions verified and stubbed with Vitest spies.
         </p>
@@ -118,6 +110,16 @@ import {
         </p>
         <div class="widget__body">
           <app-nav-panel />
+        </div>
+      </article>
+
+      <article class="widget">
+        <h2 class="widget__title">Shopping cart</h2>
+        <p class="widget__desc">
+          A state-holding service tested in isolation, without a component.
+        </p>
+        <div class="widget__body">
+          <app-cart-panel />
         </div>
       </article>
 
@@ -212,7 +214,8 @@ import {
       height and paint over the row below. Forcing the embedded hosts to block
       lets their content contribute proper height and stops the overlap.
     */
-    .widget__body :is(
+    .widget__body
+      :is(
         app-counter,
         app-greeting,
         app-name-field,
@@ -220,7 +223,8 @@ import {
         app-message-panel,
         app-user-panel,
         app-feature-toggle-panel,
-        app-nav-panel
+        app-nav-panel,
+        app-cart-panel
       ) {
       display: block;
     }
