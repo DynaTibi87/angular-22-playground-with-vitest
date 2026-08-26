@@ -22,13 +22,13 @@ import { ActivityService } from './activity.service';
 export class ActivityFeed implements OnInit {
   readonly owner = input.required<string>();
 
-  private readonly activityService = inject(ActivityService);
+  readonly #activityService = inject(ActivityService);
 
   readonly items = signal<string[]>([]);
   readonly loading = signal(true);
 
   ngOnInit(): void {
-    this.activityService.loadRecentActivity(this.owner()).then((items) => {
+    this.#activityService.loadRecentActivity(this.owner()).then((items) => {
       this.items.set(items);
       this.loading.set(false);
     });

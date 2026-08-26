@@ -22,27 +22,27 @@ export class CartService {
 
   // Collaborator that decides the discount. Injecting it (rather than baking
   // the rule in here) is what lets tests replace it with a controlled fake.
-  private readonly discounts = inject(DiscountService);
-  private readonly http = inject(HttpClient);
+  readonly #discounts = inject(DiscountService);
+  readonly #http = inject(HttpClient);
 
   // The single source of truth. Kept private so callers can only mutate it
   // through the intent-revealing methods below.
-  private readonly _lines = signal<CartLine[]>([]);
-  readonly lines: Signal<readonly CartLine[]> = this._lines.asReadonly();
+  readonly #lines = signal<CartLine[]>([]);
+  readonly lines: Signal<readonly CartLine[]> = this.#lines.asReadonly();
 
   // Total number of individual units across every line.
   readonly itemCount = computed(() =>
-    this._lines().reduce((sum, line) => sum + line.quantity, 0),
+    this.#lines().reduce((sum, line) => sum + line.quantity, 0),
   );
 
   // Price before any discount is applied.
   readonly subtotal = computed(() =>
-    this._lines().reduce((sum, line) => sum + line.price * line.quantity, 0),
+    this.#lines().reduce((sum, line) => sum + line.price * line.quantity, 0),
   );
 
   // Discount amount, delegated to the injected collaborator.
   readonly discount = computed(() =>
-    this.discounts.discountFor(this.subtotal()),
+    this.#discounts.discountFor(this.subtotal()),
   );
 
   // What the customer actually pays.
@@ -54,7 +54,7 @@ export class CartService {
       throw new Error('Quantity must be a positive number.');
     }
 
-    this._lines.update((lines) => {
+    this.#lines.update((lines) => {
       const existing = lines.find((line) => line.id === product.id);
 
       if (existing) {
@@ -71,20 +71,20 @@ export class CartService {
 
   // Drops a line entirely, regardless of its quantity.
   remove(productId: string): void {
-    this._lines.update((lines) =>
+    this.#lines.update((lines) =>
       lines.filter((line) => line.id !== productId),
     );
   }
 
   // Empties the cart.
   clear(): void {
-    this._lines.set([]);
+    this.#lines.set([]);
   }
 
   // An async method backed by HttpClient. It gives the spec a chance to test a
   // service's HTTP call DIRECTLY with HttpTestingController - no component in
   // the middle.
   loadCatalog(): Observable<Product[]> {
-    return this.http.get<Product[]>(CartService.CATALOG_URL);
+    return this.#http.get<Product[]>(CartService.CATALOG_URL);
   }
 }

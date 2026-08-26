@@ -48,7 +48,7 @@ import { GithubUser, UserService } from './user.service';
   `,
 })
 export class UserPanel {
-  private readonly userService = inject(UserService);
+  readonly #userService = inject(UserService);
 
   readonly username = signal('');
   readonly loading = signal(false);
@@ -65,7 +65,7 @@ export class UserPanel {
     this.user.set(null);
     this.error.set('');
 
-    this.userService.fetchUser(username).subscribe({
+    this.#userService.fetchUser(username).subscribe({
       next: (user) => {
         this.user.set(user);
         this.loading.set(false);

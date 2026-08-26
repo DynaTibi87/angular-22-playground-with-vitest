@@ -12,9 +12,9 @@ export type GithubUser = {
 export class UserService {
   static readonly BASE_URL = 'https://api.github.com/users';
 
-  private readonly http = inject(HttpClient);
+  readonly #http = inject(HttpClient);
 
   fetchUser(username: string): Observable<GithubUser> {
-    return this.http.get<GithubUser>(`${UserService.BASE_URL}/${username}`);
+    return this.#http.get<GithubUser>(`${UserService.BASE_URL}/${username}`);
   }
 }

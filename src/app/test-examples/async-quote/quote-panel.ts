@@ -18,7 +18,7 @@ import { QuoteService } from './quote.service';
   `,
 })
 export class QuotePanel {
-  private readonly quoteService = inject(QuoteService);
+  readonly #quoteService = inject(QuoteService);
 
   readonly quote = signal('');
 
@@ -27,7 +27,7 @@ export class QuotePanel {
   loadQuote(): void {
     this.loading.set(true);
 
-    this.quoteService.fetchQuote().subscribe((sentence) => {
+    this.#quoteService.fetchQuote().subscribe((sentence) => {
       this.quote.set(sentence);
       this.loading.set(false);
     });

@@ -43,7 +43,7 @@ import { FeatureFlagService, Variant } from './feature-flag.service';
 export class FeatureTogglePanel {
   static readonly EXPERIMENT = 'beta-dashboard';
 
-  private readonly flags = inject(FeatureFlagService);
+  readonly #flags = inject(FeatureFlagService);
 
   readonly enabled = signal(false);
   readonly variant = signal<Variant | null>(null);
@@ -53,15 +53,15 @@ export class FeatureTogglePanel {
   readonly toggleCount = signal(0);
 
   readonly serviceMethods = [
-    this.flags.assignVariant.name,
-    this.flags.recordExposure.name,
+    this.#flags.assignVariant.name,
+    this.#flags.recordExposure.name,
   ].join(', ');
 
   async joinExperiment(): Promise<void> {
     if (this.joined()) {
       this.joined.set(false);
       this.variant.set(null);
-      this.flags.recordExposure(FeatureTogglePanel.EXPERIMENT, 'left');
+      this.#flags.recordExposure(FeatureTogglePanel.EXPERIMENT, 'left');
       return;
     }
 
@@ -69,10 +69,10 @@ export class FeatureTogglePanel {
     this.error.set('');
 
     try {
-      const variant = await this.flags.assignVariant();
+      const variant = await this.#flags.assignVariant();
       this.variant.set(variant);
       this.joined.set(true);
-      this.flags.recordExposure(FeatureTogglePanel.EXPERIMENT, variant);
+      this.#flags.recordExposure(FeatureTogglePanel.EXPERIMENT, variant);
     } catch {
       this.error.set('Could not assign a variant');
     } finally {
@@ -85,7 +85,7 @@ export class FeatureTogglePanel {
     this.enabled.set(next);
     this.toggleCount.update((count) => count + 1);
 
-    this.flags.recordExposure(
+    this.#flags.recordExposure(
       FeatureTogglePanel.EXPERIMENT,
       next ? 'enabled' : 'disabled',
     );

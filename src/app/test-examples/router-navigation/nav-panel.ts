@@ -49,18 +49,18 @@ export class NavPanel {
   static readonly VIEWS: readonly View[] = ['overview', 'details', 'settings'];
   static readonly DEFAULT_VIEW: View = 'overview';
 
-  private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
+  readonly #router = inject(Router);
+  readonly #route = inject(ActivatedRoute);
 
   readonly views = NavPanel.VIEWS;
 
-  private readonly viewParam = toSignal(
-    this.route.queryParamMap.pipe(map((params) => params.get('view'))),
+  readonly #viewParam = toSignal(
+    this.#route.queryParamMap.pipe(map((params) => params.get('view'))),
     { initialValue: null },
   );
 
   readonly activeView = computed<View>(() => {
-    const value = this.viewParam();
+    const value = this.#viewParam();
     return NavPanel.VIEWS.includes(value as View)
       ? (value as View)
       : NavPanel.DEFAULT_VIEW;
@@ -68,6 +68,6 @@ export class NavPanel {
 
   goToSettings(): void {
     // Same-path navigation that only updates the query params.
-    this.router.navigate([], { queryParams: { view: 'settings' } });
+    this.#router.navigate([], { queryParams: { view: 'settings' } });
   }
 }
