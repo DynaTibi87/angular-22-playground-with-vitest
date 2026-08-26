@@ -1,0 +1,161 @@
+:host {
+  display: block;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #1f2933;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 2rem;
+}
+
+.page-header p {
+  margin: 0;
+  color: #52606d;
+}
+
+.widget-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  column-gap: 1.5rem;
+  row-gap: 2rem;
+  align-items: stretch;
+  padding-bottom: 2rem;
+}
+
+.widget {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border: 1px solid #e4e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.widget__title {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.widget__desc {
+  margin: 0;
+  color: #7b8794;
+  font-size: 0.85rem;
+}
+
+.widget__body {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed #e4e7eb;
+  flex: 1;
+}
+
+/*
+  The example components have no host styles, so they default to
+  display: inline. An inline host does not establish block height for its
+  block-level template content, which makes each card under-measure its
+  height and paint over the row below. Forcing the embedded hosts to block
+  lets their content contribute proper height and stops the overlap.
+*/
+.widget__body
+  :is(
+    app-counter,
+    app-greeting,
+    app-name-field,
+    app-quote-panel,
+    app-message-panel,
+    app-user-panel,
+    app-feature-toggle-panel,
+    app-nav-panel,
+    app-cart-panel
+  ) {
+  display: block;
+}
+
+/* Show which component is which inside the nested-components card. */
+.widget__body .tag {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  color: #7b8794;
+}
+
+.widget__body .tag code {
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  background: #eef2f7;
+  color: #1f2933;
+}
+
+/* Examples embed their own heading; keep it modest inside the card. */
+.widget__body h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  color: #3e4c59;
+}
+
+.widget__note {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: #3e4c59;
+}
+
+.widget__note code {
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  background: #eef2f7;
+  font-size: 0.78rem;
+}
+
+.widget__action {
+  margin-top: 0.5rem;
+  align-self: flex-start;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #cbd2d9;
+  border-radius: 6px;
+  background: #f5f7fa;
+  color: #1f2933;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.widget__action:hover {
+  background: #e4e7eb;
+}
+
+/* Give the Highlight directive demo lines a little breathing room so the
+   painted background is easy to see. */
+.highlight-demo {
+  margin: 0 0 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #1f2933;
+}
+
+.highlight-demo code {
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 0.78rem;
+}
+

@@ -1,0 +1,142 @@
+<header class="page-header">
+  <h1>Test Guide</h1>
+  <p>Live playground of the components exercised by the Vitest examples.</p>
+</header>
+
+<section class="widget-grid">
+  <article class="widget">
+    <h2 class="widget__title">Counter</h2>
+    <p class="widget__desc">Signal-driven state with increment / decrement.</p>
+    <div class="widget__body">
+      <app-counter />
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Greeting</h2>
+    <p class="widget__desc">Required input plus an output event.</p>
+    <div class="widget__body">
+      <app-greeting [name]="greetingName()" (greeted)="onGreeted($event)" />
+      <p class="widget__note">
+        <code>name</code> (input signal) = “{{ greetingName() }}”
+      </p>
+      <button type="button" class="widget__action" (click)="shuffleName()">
+        Shuffle name
+      </button>
+      @if (lastGreeting()) {
+      <p class="widget__note">Last emitted: “{{ lastGreeting() }}”</p>
+      }
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Name field</h2>
+    <p class="widget__desc">Two-way-like sync between an input and a signal.</p>
+    <div class="widget__body">
+      <app-name-field />
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Async quote</h2>
+    <p class="widget__desc">Service call with a simulated network delay.</p>
+    <div class="widget__body">
+      <app-quote-panel />
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">HTTP user</h2>
+    <p class="widget__desc">HttpClient request tested with a mocked backend.</p>
+    <div class="widget__body">
+      <app-user-panel />
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Service injection</h2>
+    <p class="widget__desc">Shared signal state through an injected service.</p>
+    <div class="widget__body">
+      <app-message-panel />
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Nested components</h2>
+    <p class="widget__desc">
+      Service interactions verified and stubbed with Vitest spies.
+    </p>
+    <div class="widget__body">
+      <app-feature-toggle-panel />
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Router navigation</h2>
+    <p class="widget__desc">
+      RouterLink and programmatic navigation tested with RouterTestingHarness.
+    </p>
+    <div class="widget__body">
+      <app-nav-panel />
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Shopping cart</h2>
+    <p class="widget__desc">
+      A state-holding service tested in isolation, without a component.
+    </p>
+    <div class="widget__body">
+      <app-cart-panel />
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Nested components</h2>
+    <p class="widget__desc">
+      Parent wiring verified with a real child and a stubbed one.
+    </p>
+    <div class="widget__body">
+      <app-profile-card [profile]="profile()" />
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Highlight directive</h2>
+    <p class="widget__desc">
+      An attribute directive tested through a host component.
+    </p>
+    <div class="widget__body">
+      <p class="highlight-demo" appHighlight="skyblue">
+        Static color (<code>appHighlight="skyblue"</code>)
+      </p>
+      <p class="highlight-demo" [appHighlight]="highlightColor()">
+        Bound color (<code>[appHighlight]</code> = “{{ highlightColor() }}”)
+      </p>
+      <p class="highlight-demo" appHighlight>
+        No value → falls back to the default color
+      </p>
+      <button type="button" class="widget__action" (click)="shuffleHighlight()">
+        Shuffle bound color
+      </button>
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Title case pipe</h2>
+    <p class="widget__desc">
+      A pure pipe transforming text, tested in isolation without TestBed.
+    </p>
+    <div class="widget__body">
+      <input
+        type="text"
+        class="widget__input"
+        [value]="pipeInput()"
+        (input)="onPipeInput($event)"
+      />
+      <p class="widget__note" style="white-space: pre-wrap">
+        Output: “{{ pipeInput() | titlecase }}”
+      </p>
+    </div>
+  </article>
+</section>
