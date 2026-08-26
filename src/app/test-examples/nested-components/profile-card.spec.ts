@@ -7,6 +7,7 @@ import { ProfileCard, Profile } from './profile-card';
 import { UserBadge } from './user-badge';
 import { ActivityFeed } from './activity-feed';
 import { ActivityService } from './activity.service';
+import { componentInstanceOf } from '../../../testing/component-instance';
 
 // A stand-in for the heavy <app-activity-feed> child. It reuses the SAME
 // selector and declares the SAME inputs, so the parent template binds to it
@@ -68,7 +69,9 @@ describe('ProfileCard (nested components)', () => {
       // Grab the child's DebugElement by its component type, then read the
       // child component instance to assert the inputs it actually received.
       const badge = debugElement.query(By.directive(UserBadge));
-      const badgeInstance = badge.componentInstance as UserBadge;
+      // The helper narrows the `any` instance to `UserBadge` via `instanceof`,
+      // so the type is proven at runtime rather than asserted with `as`.
+      const badgeInstance = componentInstanceOf(badge, UserBadge);
 
       expect(badgeInstance.name()).toBe('Ada Lovelace');
       expect(badgeInstance.role()).toBe('Engineer');
@@ -88,7 +91,7 @@ describe('ProfileCard (nested components)', () => {
       await fixture.whenStable();
 
       const badge = debugElement.query(By.directive(UserBadge));
-      const badgeInstance = badge.componentInstance as UserBadge;
+      const badgeInstance = componentInstanceOf(badge, UserBadge);
 
       expect(badgeInstance.name()).toBe('Grace Hopper');
       expect(
@@ -113,7 +116,7 @@ describe('ProfileCard (nested components)', () => {
     it('should still bind the parent input onto the stub', () => {
       // The stub declares the same `owner` input, so the parent binding works.
       const stub = debugElement.query(By.directive(ActivityFeedStub));
-      const stubInstance = stub.componentInstance as ActivityFeedStub;
+      const stubInstance = componentInstanceOf(stub, ActivityFeedStub);
 
       expect(stubInstance.owner()).toBe('Ada Lovelace');
     });
