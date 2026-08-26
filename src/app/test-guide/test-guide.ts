@@ -9,6 +9,7 @@ import { FeatureTogglePanel } from '../test-examples/spy-feature-toggle/feature-
 import { NavPanel } from '../test-examples/router-navigation/nav-panel';
 import { CartPanel } from '../test-examples/cart/cart-panel';
 import { Highlight } from '../test-examples/highlight-directive/highlight';
+import { TitleCasePipe } from '../test-examples/title-case-pipe/title-case.pipe';
 import {
   ProfileCard,
   Profile,
@@ -31,6 +32,7 @@ import {
     CartPanel,
     Highlight,
     ProfileCard,
+    TitleCasePipe,
   ],
   template: `
     <header class="page-header">
@@ -167,6 +169,24 @@ import {
           >
             Shuffle bound color
           </button>
+        </div>
+      </article>
+
+      <article class="widget">
+        <h2 class="widget__title">Title case pipe</h2>
+        <p class="widget__desc">
+          A pure pipe transforming text, tested in isolation without TestBed.
+        </p>
+        <div class="widget__body">
+          <input
+            type="text"
+            class="widget__input"
+            [value]="pipeInput()"
+            (input)="onPipeInput($event)"
+          />
+          <p class="widget__note" style="white-space: pre-wrap">
+            Output: “{{ pipeInput() | titlecase }}”
+          </p>
         </div>
       </article>
     </section>
@@ -368,6 +388,13 @@ export class TestGuide {
 
   // Drives the `[appHighlight]` binding in the Highlight directive widget.
   readonly highlightColor = signal<string>(this.highlightColors[0]);
+
+  // Backing value for the Title case pipe demo input.
+  readonly pipeInput = signal('the quick brown fox');
+
+  onPipeInput(event: Event): void {
+    this.pipeInput.set((event.target as HTMLInputElement).value);
+  }
 
   shuffleName(): void {
     this.greetingName.set(this.pickRandomName());
