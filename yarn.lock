@@ -224,6 +224,7 @@ __metadata:
     "@angular-devkit/core": "npm:~22.0.0"
     "@angular-devkit/schematics": "npm:~22.0.4"
     "@angular/build": "npm:~22.0.4"
+    "@angular/cdk": "npm:~22.0.0"
     "@angular/cli": "npm:~22.0.4"
     "@angular/common": "npm:~22.0.4"
     "@angular/compiler": "npm:~22.0.4"
@@ -482,6 +483,21 @@ __metadata:
     vitest:
       optional: true
   checksum: 10c0/f7a8e5ad846d2b65d0c89ac6cb68a30d49ca08498392525d5470ec6219203aad822def4f8f4437530a1a788a15ff9cfe2223b27540667206197e0ec7f0419c5b
+  languageName: node
+  linkType: hard
+
+"@angular/cdk@npm:~22.0.0":
+  version: 22.0.7
+  resolution: "@angular/cdk@npm:22.0.7"
+  dependencies:
+    parse5: "npm:^8.0.0"
+    tslib: "npm:^2.3.0"
+  peerDependencies:
+    "@angular/common": ^22.0.0 || ^23.0.0
+    "@angular/core": ^22.0.0 || ^23.0.0
+    "@angular/platform-browser": ^22.0.0 || ^23.0.0
+    rxjs: ^6.5.3 || ^7.4.0
+  checksum: 10c0/e2bfa35f37cc7afac66748e3a323acf3e89949130f1b94e2106df66edcb5f6d0cecb7382b71d9fdf634ae8375255471eaa79e6b31a23733d2a53cf10131e4c56
   languageName: node
   linkType: hard
 

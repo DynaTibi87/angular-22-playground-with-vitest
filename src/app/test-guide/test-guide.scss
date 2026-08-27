@@ -142,6 +142,20 @@
   background: #e4e7eb;
 }
 
+/*
+  Shared grid for the stacked steppers. It declares the four column tracks
+  (label / − / value / +) once; each <app-quantity-stepper> is a subgrid that
+  spans and adopts them, so the columns line up across rows no matter how long
+  each label is. `max-content` sizes the label column to the longest label.
+*/
+.stepper-stack {
+  display: grid;
+  grid-template-columns: max-content auto minmax(2ch, auto) auto;
+  gap: 0.6rem 0.5rem;
+  align-items: center;
+  justify-content: start;
+}
+
 /* Give the Highlight directive demo lines a little breathing room so the
    painted background is easy to see. */
 .highlight-demo {

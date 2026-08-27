@@ -139,4 +139,18 @@
       </p>
     </div>
   </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Component harness</h2>
+    <p class="widget__desc">
+      A reusable widget driven in tests through a CDK ComponentHarness.
+    </p>
+    <div class="widget__body">
+      <div class="stepper-stack">
+        <app-quantity-stepper label="Adults" [value]="1" [min]="1" [max]="4" />
+        <app-quantity-stepper label="Children" [value]="0" [min]="0" [max]="3" />
+        <app-quantity-stepper label="Rooms" [value]="2" [min]="1" [max]="2" />
+      </div>
+    </div>
+  </article>
 </section>

@@ -10,6 +10,7 @@ import { NavPanel } from '../test-examples/router-navigation/nav-panel';
 import { CartPanel } from '../test-examples/cart/cart-panel';
 import { Highlight } from '../test-examples/highlight-directive/highlight';
 import { TitleCasePipe } from '../test-examples/title-case-pipe/title-case.pipe';
+import { QuantityStepper } from '../test-examples/component-harness/quantity-stepper';
 import {
   ProfileCard,
   Profile,
@@ -33,6 +34,7 @@ import {
     Highlight,
     ProfileCard,
     TitleCasePipe,
+    QuantityStepper,
   ],
   templateUrl: './test-guide.html',
   styleUrl: './test-guide.scss',

@@ -47,6 +47,7 @@
   },
   "packageManager": "yarn@4.14.1",
   "dependencies": {
+    "@angular/cdk": "~22.0.0",
     "@angular/common": "~22.0.4",
     "@angular/compiler": "~22.0.4",
     "@angular/core": "~22.0.4",
