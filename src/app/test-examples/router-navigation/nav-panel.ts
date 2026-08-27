@@ -11,9 +11,10 @@ export type View = 'overview' | 'details' | 'settings';
   template: `
     <h3>Router navigation</h3>
 
-    <nav data-testid="nav">
+    <nav data-testid="nav" style="display: flex; gap: 0.5rem;">
       @for (view of views; track view) {
         <a
+          style="cursor: pointer;"
           [attr.data-testid]="'link-' + view"
           [routerLink]="[]"
           [queryParams]="{ view }"

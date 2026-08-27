@@ -8,7 +8,7 @@ import { CartService, Product } from './cart.service';
 
     <ul data-testid="catalog" class="cart-panel__catalog">
       @for (product of catalog; track product.id) {
-        <li>
+        <li style="margin-block-end: 8px">
           <button type="button" (click)="cart.add(product)">
             Add {{ product.name }} (\${{ product.price }})
           </button>

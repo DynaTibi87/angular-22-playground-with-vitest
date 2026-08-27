@@ -1,52 +1,46 @@
+// Layout spacing follows the Material 3 spacing system (4dp base grid,
+// 8dp rhythm): https://m3.material.io/styles/spacing/overview
+
 :host {
   display: block;
-  padding: 2rem;
+  padding: var(--space-8); // 32
   max-width: 1200px;
   margin: 0 auto;
-  color: #1f2933;
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
+  color: var(--color-text);
+  font-family: var(--font-sans);
 }
 
 .page-header {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-8); // 32
 }
 
 .page-header h1 {
-  margin: 0 0 0.25rem;
+  margin: 0 0 var(--space-1); // 4
   font-size: 2rem;
 }
 
 .page-header p {
   margin: 0;
-  color: #52606d;
+  color: var(--color-text-muted);
 }
 
 .widget-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  column-gap: 1.5rem;
-  row-gap: 2rem;
+  column-gap: var(--space-6); // 24
+  row-gap: var(--space-6); // 24
   align-items: stretch;
-  padding-bottom: 2rem;
+  padding-bottom: var(--space-8); // 32
 }
 
 .widget {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.25rem;
-  border: 1px solid #e4e7eb;
-  border-radius: 12px;
-  background: #ffffff;
+  gap: var(--space-2); // 8
+  padding: var(--space-6); // 24
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
   box-shadow:
     0 1px 2px rgba(15, 23, 42, 0.04),
     0 4px 12px rgba(15, 23, 42, 0.06);
@@ -59,23 +53,27 @@
 
 .widget__desc {
   margin: 0;
-  color: #7b8794;
+  color: var(--color-text-subtle);
   font-size: 0.85rem;
 }
 
 .widget__body {
-  margin-top: 0.5rem;
-  padding-top: 0.75rem;
-  border-top: 1px dashed #e4e7eb;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3); // 12
+  margin-top: var(--space-2); // 8
+  padding-top: var(--space-4); // 16
+  border-top: 1px dashed var(--color-outline-variant);
   flex: 1;
 }
 
 /*
-  The example components have no host styles, so they default to
-  display: inline. An inline host does not establish block height for its
-  block-level template content, which makes each card under-measure its
-  height and paint over the row below. Forcing the embedded hosts to block
-  lets their content contribute proper height and stops the overlap.
+  The example components ship without host styles, so they default to
+  display: inline — which under-measures card height and lets rows overlap.
+  Rendering them as flex columns fixes the height and, together with a single
+  grid-aligned `gap`, gives every embedded example a consistent 8dp vertical
+  rhythm without editing each component.
 */
 .widget__body
   :is(
@@ -87,59 +85,203 @@
     app-user-panel,
     app-feature-toggle-panel,
     app-nav-panel,
-    app-cart-panel
+    app-cart-panel,
+    app-profile-card
   ) {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2); // 8
+  width: 100%;
+}
+
+/* Let the gap own the spacing: drop the browser's default block margins. */
+.widget__body
+  :is(app-counter, app-greeting, app-name-field, app-quote-panel, app-message-panel, app-user-panel, app-feature-toggle-panel, app-nav-panel, app-cart-panel, app-profile-card)
+  :is(p, h3, dt, dd, label) {
+  margin: 0;
+}
+
+/* The counter reads best as a single horizontal row of controls. */
+.widget__body app-counter {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3); // 12
+}
+
+/* Wrapped text fields (name-field, HTTP user): stack the caption above the
+   field with a 4dp gap so the label and input no longer collide. */
+.widget__body label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1); // 4
+  width: 100%;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* Every text field shares the same grid-aligned box — including the ones
+   carrying a class, which the global `input:not([class])` rule skips. */
+.widget__body input[type='text'],
+.widget__body .widget__input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3); // 8 / 12
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.widget__body input[type='text']:focus-visible,
+.widget__body .widget__input:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+/* Grouped content (lists, nav) shares the same 8dp rhythm and loses the
+   default browser indentation so it aligns with the rest of the card. */
+.widget__body :is(ul, nav) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2); // 8
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+
+.widget__body nav[data-testid='nav'] {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-2); // 8
+}
+
+.widget__body nav[data-testid='nav'] a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--space-8); // 32
+  padding: var(--space-1) var(--space-3); // 4 / 12
+  border-radius: var(--radius-full);
+  background: var(--color-surface-variant);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.widget__body nav[data-testid='nav'] a:hover {
+  background: var(--color-outline-variant);
+}
+
+.widget__body nav[data-testid='nav'] a.active,
+.widget__body nav[data-testid='nav'] a.active:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* Catalog: full-width "Add" buttons read as a tidy product list. */
+.widget__body app-cart-panel ul[data-testid='catalog'] li {
+  display: flex;
+}
+
+.widget__body app-cart-panel ul[data-testid='catalog'] button {
+  width: 100%;
+  text-align: left;
+}
+
+/* The cart lines pair a label with a Remove button on one row. */
+.widget__body app-cart-panel ul[data-testid='lines'] li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3); // 12
+}
+
+/* Remove is a lightweight secondary action next to each line. */
+.widget__body app-cart-panel ul[data-testid='lines'] button {
+  flex: none;
+  padding: var(--space-1) var(--space-2); // 4 / 8
+  font-size: 0.78rem;
+}
+
+/* GitHub user details: a compact two-column key/value grid. */
+.widget__body app-user-panel dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-1) var(--space-3); // 4 row / 12 column
+  margin: 0;
+}
+
+.widget__body app-user-panel dt {
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+/* Nested-component wrappers get a matching column rhythm. */
+.widget__body
+  :is([data-testid='profile-card'], [data-testid='user-badge'], [data-testid='activity-feed']) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2); // 8
+  width: 100%;
+}
+
+.widget__body :is([data-testid='user-badge'], [data-testid='activity-feed']) {
+  padding: var(--space-3); // 12
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-variant);
 }
 
 /* Show which component is which inside the nested-components card. */
 .widget__body .tag {
-  margin: 0 0 0.5rem;
+  margin: 0;
   font-size: 0.78rem;
-  color: #7b8794;
+  color: var(--color-text-subtle);
 }
 
 .widget__body .tag code {
-  padding: 0.05rem 0.3rem;
-  border-radius: 4px;
-  background: #eef2f7;
-  color: #1f2933;
+  padding: var(--space-1) var(--space-2); // 4 / 8
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  color: var(--color-text);
 }
 
 /* Examples embed their own heading; keep it modest inside the card. */
 .widget__body h3 {
-  margin: 0 0 0.5rem;
+  margin: 0;
   font-size: 0.95rem;
   color: #3e4c59;
 }
 
 .widget__note {
-  margin: 0.5rem 0 0;
+  margin: 0;
   font-size: 0.8rem;
   color: #3e4c59;
 }
 
 .widget__note code {
-  padding: 0.05rem 0.3rem;
-  border-radius: 4px;
-  background: #eef2f7;
+  padding: var(--space-1) var(--space-2); // 4 / 8
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
   font-size: 0.78rem;
 }
 
 .widget__action {
-  margin-top: 0.5rem;
   align-self: flex-start;
-  padding: 0.35rem 0.75rem;
-  border: 1px solid #cbd2d9;
-  border-radius: 6px;
-  background: #f5f7fa;
-  color: #1f2933;
+  padding: var(--space-2) var(--space-3); // 8 / 12
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-variant);
+  color: var(--color-text);
   font-size: 0.8rem;
   cursor: pointer;
 }
 
 .widget__action:hover {
-  background: #e4e7eb;
+  background: var(--color-outline-variant);
 }
 
 /*
@@ -151,7 +293,7 @@
 .stepper-stack {
   display: grid;
   grid-template-columns: max-content auto minmax(2ch, auto) auto;
-  gap: 0.6rem 0.5rem;
+  gap: var(--space-3) var(--space-2); // 12 row / 8 column
   align-items: center;
   justify-content: start;
 }
@@ -159,16 +301,17 @@
 /* Give the Highlight directive demo lines a little breathing room so the
    painted background is easy to see. */
 .highlight-demo {
-  margin: 0 0 0.5rem;
-  padding: 0.35rem 0.5rem;
-  border-radius: 6px;
+  margin: 0;
+  width: 100%;
+  padding: var(--space-2) var(--space-3); // 8 / 12
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
-  color: #1f2933;
+  color: var(--color-text);
 }
 
 .highlight-demo code {
-  padding: 0.05rem 0.3rem;
-  border-radius: 4px;
+  padding: var(--space-1) var(--space-2); // 4 / 8
+  border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.6);
   font-size: 0.78rem;
 }
