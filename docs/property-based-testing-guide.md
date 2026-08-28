@@ -17,6 +17,9 @@ Sources this guide builds on:
 > property-based tests where they pay off.
 > **Goal:** understand *what* a property is, *when* to reach for one, and *how*
 > to test pure logic, an NgRx reducer, selectors, and a component together.
+>
+> **See also:** [Adapter Testing Findings](./adapter-testing-findings.md) — real
+> bugs and edge cases fast-check surfaced in the `/adapter` demo.
 
 ---
 
@@ -75,6 +78,63 @@ Import the enhanced `test` (or `it`) and `fc` from the bridge; keep
 import { fc, test } from '@fast-check/vitest';
 import { describe, expect, it } from 'vitest';
 ```
+
+### 2.1 Two ways to run a property: `test.prop` vs. `fc.assert`
+
+fast-check offers the same power through two APIs. They are equivalent — the
+first is just the ergonomic Vitest wrapper around the second.
+
+**`test.prop([...])` / `it.prop([...])`** — from `@fast-check/vitest`. This *is*
+the test: the bridge registers the Vitest test **and** runs the property in one
+call, so there's no boilerplate. This is what the repo's specs use.
+
+```ts
+import { fc, test } from '@fast-check/vitest';
+
+test.prop([anyOrder])('total equals subtotal minus discount', (order) => {
+  const ui = adaptOrder(order);
+  expect(parseMoney(ui.totalLabel)).toBe(
+    parseMoney(ui.subtotalLabel) - parseMoney(ui.discountLabel),
+  );
+});
+```
+
+**`fc.assert(fc.property(...))`** — the core `fast-check` API. It's
+framework-agnostic (works in any runner) but does **not** register a test, so it
+must live *inside* a normal `it`/`test` block:
+
+```ts
+import * as fc from 'fast-check';
+import { it, expect } from 'vitest';
+
+it('total equals subtotal minus discount', () => {
+  fc.assert(
+    fc.property(anyOrder, (order) => {
+      const ui = adaptOrder(order);
+      expect(parseMoney(ui.totalLabel)).toBe(
+        parseMoney(ui.subtotalLabel) - parseMoney(ui.discountLabel),
+      );
+    }),
+  );
+});
+```
+
+| | `test.prop([...])` | `fc.assert(fc.property(...))` |
+| --- | --- | --- |
+| Package | `@fast-check/vitest` (bridge) | `fast-check` (core) |
+| Registers the test? | Yes — it *is* the test | No — needs an enclosing `it`/`test` |
+| Boilerplate | None | Explicit `assert` + `property` |
+| Runner coupling | Vitest-specific | Any runner (Vitest, Jest, Node…) |
+| Runner options | 2nd arg: `test.prop([...], { seed, numRuns })(...)` | 2nd arg: `fc.assert(prop, { seed, numRuns })` |
+
+**Which to use here:** prefer **`test.prop`** for clean Vitest specs (all the
+specs in this repo do). Reach for raw **`fc.assert`** only when you need a
+property *inside* an existing example test, or in code that isn't Vitest-bound.
+
+> The scratch guide `fast-check-complex.md` uses the core `fc.assert` style;
+> translating it to this repo means swapping `import * as fc from 'fast-check'` +
+> `it(() => fc.assert(fc.property(arb, fn)))` for
+> `import { fc, test } from '@fast-check/vitest'` + `test.prop([arb])(name, fn)`.
 
 ---
 

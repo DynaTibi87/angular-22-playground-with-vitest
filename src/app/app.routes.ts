@@ -8,6 +8,7 @@ import { CartService } from './test-examples/cart/cart.service';
 import { DiscountService } from './test-examples/cart/discount.service';
 import { FastCheckDemo } from './fast-check-demo/fast-check-demo';
 import { walletFeature } from './fast-check-demo/wallet/wallet.reducer';
+import { AdapterDemo } from './adapter-demo/adapter-demo';
 
 export const appRoutes: Route[] = [
   {
@@ -30,6 +31,12 @@ export const appRoutes: Route[] = [
     // `provideStore()` sets up the root store; `provideState(walletFeature)`
     // registers the "wallet" slice. The component spec wires these up the same way.
     providers: [provideStore(), provideState(walletFeature)],
+  },
+  {
+    path: 'adapter',
+    component: AdapterDemo,
+    // A pure backend → UI adapter demo. No store needed: the component only
+    // renders a generated payload and its adapted UI model side by side.
   },
   { path: '', redirectTo: 'test-guide', pathMatch: 'full' },
 ];

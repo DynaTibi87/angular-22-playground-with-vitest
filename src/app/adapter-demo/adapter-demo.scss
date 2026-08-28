@@ -1,0 +1,213 @@
+// Reuses the same design tokens and 4/8dp rhythm as the fast-check page.
+
+:host {
+  display: block;
+  padding: var(--space-8); // 32
+  max-width: 1200px;
+  margin: 0 auto;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+.page-header {
+  margin-bottom: var(--space-6); // 24
+}
+
+.page-header h1 {
+  margin: 0 0 var(--space-1); // 4
+  font-size: 2rem;
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.toolbar {
+  margin-bottom: var(--space-6); // 24
+}
+
+.toolbar button {
+  padding: var(--space-2) var(--space-4); // 8 / 16
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.toolbar button:hover {
+  background: var(--color-surface-variant, #f1f5f9);
+}
+
+.fc-layout {
+  display: grid;
+  // Two roomy columns side by side on wide screens, collapsing to a single
+  // column below ~900px so the cards stay comfortably wide either way.
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6); // 24
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .fc-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.widget {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2); // 8
+  padding: var(--space-6); // 24
+  border: 1px solid var(--color-outline-variant);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.widget__title {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.widget__desc {
+  margin: 0;
+  color: var(--color-text-subtle);
+  font-size: 0.85rem;
+}
+
+.widget__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3); // 12
+  margin-top: var(--space-2); // 8
+  padding-top: var(--space-4); // 16
+  border-top: 1px dashed var(--color-outline-variant);
+  flex: 1;
+}
+
+.payload {
+  margin: 0;
+  padding: var(--space-4); // 16
+  border-radius: var(--radius-sm);
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  // Wrap long values instead of forcing a horizontal scrollbar.
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ui-model {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3); // 12
+}
+
+.ui-model__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2); // 8
+  margin: 0;
+  font-size: 1rem;
+}
+
+.ui-model__banner {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.ui-model__grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-1) var(--space-4); // 4 / 16
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+.ui-model__grid dt {
+  color: var(--color-text-subtle);
+}
+
+.ui-model__grid dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.badge {
+  padding: 2px var(--space-2); // 8
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.badge--success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge--warning {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.badge--danger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.badge--neutral {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.order-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1); // 4
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.88rem;
+}
+
+.order-lines li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4); // 16
+  padding: var(--space-1) 0; // 4
+  border-bottom: 1px dashed var(--color-outline-variant);
+}
+
+.order-lines__name {
+  color: var(--color-text-muted);
+}
+
+.order-lines__total {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.order-totals {
+  margin-top: var(--space-2); // 8
+  padding-top: var(--space-3); // 12
+  border-top: 1px solid var(--color-outline-variant);
+}
+
+.order-totals dd {
+  text-align: right;
+}
+
+
+
+
+

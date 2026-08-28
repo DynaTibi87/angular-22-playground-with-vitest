@@ -1,0 +1,147 @@
+<header class="page-header">
+  <h1>Adapting backend payloads with fast-check</h1>
+  <p>
+    A pure backend → UI <strong>adapter</strong> is a great fit for
+    <a href="https://fast-check.dev" target="_blank" rel="noreferrer">fast-check</a>:
+    generate thousands of realistic — and hostile — payloads and prove the
+    mapping rules always hold. Press <em>Generate</em> to draw a new scenario
+    from a range of possible backend responses.
+  </p>
+</header>
+
+<div class="toolbar">
+  <button type="button" data-testid="generate" (click)="generate()">
+    Generate new scenario
+  </button>
+</div>
+
+<section class="fc-layout">
+  <article class="widget">
+    <h2 class="widget__title">Backend payload</h2>
+    <p class="widget__desc">
+      The raw response as it arrives from the API — <code>snake_case</code>,
+      nullable, occasionally malformed.
+    </p>
+    <div class="widget__body">
+      <pre data-testid="backend" class="payload">{{ backend() | json }}</pre>
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Adapted UI model</h2>
+    <p class="widget__desc">
+      Clean, non-null and display-ready. Every field is resolved by the adapter,
+      so the template never guards against missing data.
+    </p>
+    <div class="widget__body">
+      <div data-testid="ui" class="ui-model">
+        <p class="ui-model__title">
+          <strong>{{ ui().title }}</strong>
+          <span
+            class="badge"
+            [class]="'badge--' + ui().themeColor"
+            data-testid="status"
+          >
+            {{ ui().statusLabel }}
+          </span>
+        </p>
+
+        <p data-testid="banner" class="ui-model__banner">{{ ui().bannerMessage }}</p>
+
+        <dl class="ui-model__grid">
+          <dt>Role</dt>
+          <dd data-testid="role">{{ ui().roleLabel }}</dd>
+
+          <dt>Can edit settings</dt>
+          <dd data-testid="can-edit">{{ ui().canEditSettings ? 'Yes' : 'No' }}</dd>
+
+          <dt>Seats</dt>
+          <dd data-testid="seats">{{ ui().seats }}</dd>
+
+          <dt>Verified</dt>
+          <dd data-testid="verified">{{ ui().verified ? 'Yes' : 'No' }}</dd>
+
+          <dt>Trial</dt>
+          <dd data-testid="trial">{{ ui().trialLabel }}</dd>
+        </dl>
+      </div>
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Order payload (nested)</h2>
+    <p class="widget__desc">
+      A richer shape: a nested <code>customer</code> object and an array of
+      <code>line_items</code> with quantities, prices and discounts.
+    </p>
+    <div class="widget__body">
+      <pre data-testid="order-backend" class="payload">{{ order() | json }}</pre>
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Adapted order summary</h2>
+    <p class="widget__desc">
+      The line items are folded into money totals. The total can never go
+      negative or drift from <em>subtotal − discounts</em>.
+    </p>
+    <div class="widget__body">
+      <div data-testid="order-ui" class="ui-model">
+        <p class="ui-model__title">
+          <strong>{{ orderUi().customerName }}</strong>
+          <span
+            class="badge"
+            [class]="'badge--' + orderUi().statusColor"
+            data-testid="order-status"
+          >
+            {{ orderUi().statusLabel }}
+          </span>
+        </p>
+
+        <dl class="ui-model__grid">
+          <dt>Email</dt>
+          <dd data-testid="order-email">{{ orderUi().customerEmail }}</dd>
+
+          <dt>Loyalty</dt>
+          <dd data-testid="order-loyalty">{{ orderUi().loyaltyLabel }}</dd>
+
+          <dt>Placed</dt>
+          <dd data-testid="order-placed">{{ orderUi().placedLabel }}</dd>
+
+          <dt>Items</dt>
+          <dd data-testid="order-count">{{ orderUi().itemCount }}</dd>
+        </dl>
+
+        @if (orderUi().isEmpty) {
+          <p data-testid="order-empty" class="ui-model__banner">
+            This order has no line items yet.
+          </p>
+        } @else {
+          <ul data-testid="order-lines" class="order-lines">
+            @for (line of orderUi().items; track line.sku) {
+              <li>
+                <span class="order-lines__name">
+                  {{ line.quantity }}× {{ line.name }}
+                </span>
+                <span class="order-lines__total">{{ line.lineTotalLabel }}</span>
+              </li>
+            }
+          </ul>
+        }
+
+        <dl class="ui-model__grid order-totals">
+          <dt>Subtotal</dt>
+          <dd data-testid="order-subtotal">{{ orderUi().subtotalLabel }}</dd>
+
+          <dt>Discount</dt>
+          <dd data-testid="order-discount">−{{ orderUi().discountLabel }}</dd>
+
+          <dt>Total</dt>
+          <dd data-testid="order-total">{{ orderUi().totalLabel }}</dd>
+        </dl>
+      </div>
+    </div>
+  </article>
+</section>
+
+
