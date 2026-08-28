@@ -57,6 +57,8 @@
     "@angular/platform-browser": "~22.0.4",
     "@angular/platform-browser-dynamic": "~22.0.4",
     "@angular/router": "~22.0.4",
+    "@ngrx/operators": "^22.0.0",
+    "@ngrx/store": "^22.0.0",
     "rxjs": "~7.8.0"
   }
 }

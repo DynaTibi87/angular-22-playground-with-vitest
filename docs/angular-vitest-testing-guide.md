@@ -9,6 +9,10 @@ specs under `src/app/test-examples/`.
 > **Audience:** developers writing or reviewing tests in this repo.
 > **Goal:** understand *why* each tool exists and *when* to reach for it.
 
+> **See also:** [Property-Based Testing with fast-check](./property-based-testing-guide.md)
+> — a companion guide covering the `/fast-check` NgRx Wallet feature and when to
+> prefer generated inputs over hand-picked examples.
+
 ---
 
 ## 1. The stack at a glance

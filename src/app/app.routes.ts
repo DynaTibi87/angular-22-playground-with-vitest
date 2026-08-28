@@ -1,10 +1,13 @@
 import { Route } from '@angular/router';
+import { provideState, provideStore } from '@ngrx/store';
 import { TestGuide } from './test-guide/test-guide';
 import { QuoteService } from './test-examples/async-quote/quote.service';
 import { MessageService } from './test-examples/service-injection/message.service';
 import { UserService } from './test-examples/http-user/user.service';
 import { CartService } from './test-examples/cart/cart.service';
 import { DiscountService } from './test-examples/cart/discount.service';
+import { FastCheckDemo } from './fast-check-demo/fast-check-demo';
+import { walletFeature } from './fast-check-demo/wallet/wallet.reducer';
 
 export const appRoutes: Route[] = [
   {
@@ -19,6 +22,14 @@ export const appRoutes: Route[] = [
       CartService,
       DiscountService,
     ],
+  },
+  {
+    path: 'fast-check',
+    component: FastCheckDemo,
+    // Register the NgRx store and the Wallet feature slice for this page only.
+    // `provideStore()` sets up the root store; `provideState(walletFeature)`
+    // registers the "wallet" slice. The component spec wires these up the same way.
+    providers: [provideStore(), provideState(walletFeature)],
   },
   { path: '', redirectTo: 'test-guide', pathMatch: 'full' },
 ];

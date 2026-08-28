@@ -1,0 +1,37 @@
+<header class="page-header">
+  <h1>Property-based testing with fast-check</h1>
+  <p>
+    A small NgRx-backed Wallet whose pure logic, reducer and selectors are
+    verified with <a href="https://fast-check.dev" target="_blank" rel="noreferrer">fast-check</a>
+    running on Vitest.
+  </p>
+</header>
+
+<section class="fc-layout">
+  <article class="widget">
+    <h2 class="widget__title">Live wallet</h2>
+    <p class="widget__desc">
+      Backed by an NgRx store slice. Try to overdraw it — the balance can't go
+      negative.
+    </p>
+    <div class="widget__body">
+      <app-wallet-panel />
+    </div>
+  </article>
+
+  <article class="widget">
+    <h2 class="widget__title">Properties under test</h2>
+    <p class="widget__desc">
+      Instead of a few hand-picked examples, the specs state these invariants
+      and let fast-check try to break them with generated inputs.
+    </p>
+    <div class="widget__body">
+      <ul data-testid="invariants" class="fc-invariants">
+        @for (invariant of invariants; track invariant) {
+          <li>{{ invariant }}</li>
+        }
+      </ul>
+    </div>
+  </article>
+</section>
+
