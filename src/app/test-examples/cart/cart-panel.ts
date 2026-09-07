@@ -9,30 +9,32 @@ import { CartService, Product } from './cart.service';
     <ul data-testid="catalog" class="cart-panel__catalog">
       @for (product of catalog; track product.id) {
         <li style="margin-block-end: 8px">
-          <button type="button" (click)="cart.add(product)">
+          <button type="button" (click)="cartService.add(product)">
             Add {{ product.name }} (\${{ product.price }})
           </button>
         </li>
       }
     </ul>
 
-    @if (cart.itemCount() > 0) {
+    @if (cartService.itemCount() > 0) {
       <ul data-testid="lines">
-        @for (line of cart.lines(); track line.id) {
+        @for (line of cartService.lines(); track line.id) {
           <li>
             {{ line.name }} × {{ line.quantity }}
-            <button type="button" (click)="cart.remove(line.id)">Remove</button>
+            <button type="button" (click)="cartService.remove(line.id)">
+              Remove
+            </button>
           </li>
         }
       </ul>
 
-      <p data-testid="subtotal">Subtotal: \${{ cart.subtotal() }}</p>
-      <p data-testid="discount">Discount: \${{ cart.discount() }}</p>
+      <p data-testid="subtotal">Subtotal: \${{ cartService.subtotal() }}</p>
+      <p data-testid="discount">Discount: \${{ cartService.discount() }}</p>
       <p data-testid="total">
-        <strong>Total: \${{ cart.total() }}</strong>
+        <strong>Total: \${{ cartService.total() }}</strong>
       </p>
 
-      <button type="button" data-testid="clear" (click)="cart.clear()">
+      <button type="button" data-testid="clear" (click)="cartService.clear()">
         Clear cart
       </button>
     } @else {
@@ -43,7 +45,7 @@ import { CartService, Product } from './cart.service';
 export class CartPanel {
   // The service under test drives the whole widget. The spec exercises this
   // same service directly, without touching this component.
-  protected readonly cart = inject(CartService);
+  protected readonly cartService = inject(CartService);
 
   protected readonly catalog: readonly Product[] = [
     { id: 'kbd', name: 'Keyboard', price: 45 },
