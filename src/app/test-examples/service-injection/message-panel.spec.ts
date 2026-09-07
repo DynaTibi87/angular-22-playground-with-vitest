@@ -30,40 +30,44 @@ describe('MessagePanel', () => {
     await fixture.whenStable();
   });
 
-  it('should render', () => {
-    expect(fixture.componentInstance).toBeTruthy();
-  });
+  describe('rendering the component', () => {
+    it('should render', () => {
+      expect(fixture.componentInstance).toBeTruthy();
+    });
 
-  it('should render elements', () => {
-    expect(message).toBeTruthy();
-    expect(updateButton).toBeTruthy();
-  });
+    it('should render elements', () => {
+      expect(message).toBeTruthy();
+      expect(updateButton).toBeTruthy();
+    });
 
-  it('should render the initial message from the service', () => {
-    // The template consumes the service's public read-only signal.
-    expect(message.properties['innerHTML']).toContain(
-      'Hello from the service!',
-    );
+    it('should render the initial message from the service', () => {
+      // The template consumes the service's public read-only signal.
+      expect(message.properties['innerHTML']).toContain(
+        'Hello from the service!',
+      );
+    });
   });
 
   describe('injecting the service via the TestBed injector', () => {
     // `TestBed.inject()` resolves the token from the root/module injector.
     // Because the component uses the root-provided service, this returns the
     // exact same instance the component consumes.
-    it('should resolve the service from the TestBed', () => {
-      const service = TestBed.inject(MessageService);
+    let service: MessageService;
+    beforeEach(() => {
+      service = TestBed.inject(MessageService);
+    });
 
+    it('should resolve the service from the TestBed', () => {
       expect(service).toBeInstanceOf(MessageService);
-      expect(service.message()).toBe('Hello from the service!');
+      expect(fixture.componentInstance.messageService.message()).toBe(
+        'Hello from the service!',
+      );
     });
 
     it('should reflect service updates in the template', async () => {
-      const service = TestBed.inject(MessageService);
-
       // Drive the state through the service's public method.
       service.setMessage('Set from the TestBed injector');
       await fixture.whenStable();
-
       expect(service.message()).toBe('Set from the TestBed injector');
       expect(message.properties['innerHTML']).toContain(
         'Set from the TestBed injector',

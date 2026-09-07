@@ -9,8 +9,8 @@ describe('Functions', () => {
       expect(functions.add(2, 3)).toBe(5);
     });
 
-    it.skip('should handle decimals', () => {
-      expect(functions.add(0.1, 0.2)).toBe(0.3);
+    it('should handle decimals', () => {
+      expect(functions.add(0.1, 0.2)).toBeCloseTo(0.3);
     });
   });
 });

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { App } from './app';
@@ -14,9 +15,12 @@ describe('App', () => {
   it('should render a link to the test guide', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    const link = compiled.querySelector('.app-nav a');
-    expect(link?.textContent).toContain('Test Guide');
-    expect(link?.getAttribute('href')).toContain('/test-guide');
+
+    // Query by a stable data-testid hook rather than a styling class.
+    const link = fixture.debugElement.query(
+      By.css('[data-testid="nav-test-guide"]'),
+    );
+    expect(link.nativeElement.textContent).toContain('Test Guide');
+    expect(link.attributes['href']).toContain('/test-guide');
   });
 });

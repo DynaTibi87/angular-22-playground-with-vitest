@@ -2,7 +2,7 @@ import { Component, DebugElement, input, signal } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { inputBinding } from '@angular/core';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ProfileCard, Profile } from './profile-card';
 import { UserBadge } from './user-badge';
 import { ActivityFeed } from './activity-feed';
@@ -29,8 +29,19 @@ describe('ProfileCard (nested components)', () => {
   // Drives the parent's required `profile` input, mirroring `[profile]="..."`.
   let profile: ReturnType<typeof signal<Profile>>;
 
+  // Spy on the real child's collaborator BEFORE the component is created, so a
+  // "was never called" assertion is meaningful. Spying on the prototype covers
+  // any instance the tree might construct; attaching it after `createComponent`
+  // would be too late to observe a call that had already happened.
+  let loadRecentActivitySpy: ReturnType<typeof vi.spyOn>;
+
   beforeEach(async () => {
     profile = signal<Profile>({ name: 'Ada Lovelace', role: 'Engineer' });
+
+    loadRecentActivitySpy = vi.spyOn(
+      ActivityService.prototype,
+      'loadRecentActivity',
+    );
 
     TestBed.configureTestingModule({
       imports: [ProfileCard],
@@ -50,6 +61,11 @@ describe('ProfileCard (nested components)', () => {
     debugElement = fixture.debugElement;
 
     await fixture.whenStable();
+  });
+
+  afterEach(() => {
+    // Restore the prototype spy so it never leaks into another test file.
+    vi.restoreAllMocks();
   });
 
   describe('rendering parent and child components', () => {
@@ -124,10 +140,9 @@ describe('ProfileCard (nested components)', () => {
     it('should never touch the expensive service the real child depends on', () => {
       // Because the real ActivityFeed is not in the tree, its ActivityService
       // collaborator is never resolved or called - the whole point of stubbing.
-      const service = TestBed.inject(ActivityService);
-      const loadSpy = vi.spyOn(service, 'loadRecentActivity');
-
-      expect(loadSpy).not.toHaveBeenCalled();
+      // The spy was installed on the prototype in `beforeEach`, *before* the
+      // component was created, so it would have observed any call that happened.
+      expect(loadRecentActivitySpy).not.toHaveBeenCalled();
     });
   });
 });
