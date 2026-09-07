@@ -48,6 +48,11 @@
   font-size: 1.1rem;
 }
 
+// Forces a widget onto a fresh grid row at its normal single-card width.
+.widget--new-row {
+  grid-column: 1;
+}
+
 .widget__desc {
   margin: 0;
   color: var(--color-text-subtle);

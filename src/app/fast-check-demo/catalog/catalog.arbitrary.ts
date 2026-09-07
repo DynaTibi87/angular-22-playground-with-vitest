@@ -13,6 +13,31 @@
 import fc from 'fast-check';
 import { CatalogNode, Category, Product } from './catalog.model';
 
+// A pool of realistic product titles so generated trees read like a real shop
+// instead of random gibberish. `fc.constantFrom` draws one of these per leaf.
+const PRODUCT_TITLES = [
+  'Mechanical Keyboard',
+  'Wireless Mouse',
+  'USB-C Hub',
+  'Noise-Cancelling Headphones',
+  '4K Monitor',
+  'Standing Desk',
+  'Ergonomic Chair',
+  'Espresso Machine',
+  'Cast Iron Skillet',
+  'Running Shoes',
+  'Yoga Mat',
+  'Camping Tent',
+  'Water Bottle',
+  'Board Game',
+  'Paperback Novel',
+  'Cookbook',
+  'LEGO Set',
+  'Bluetooth Speaker',
+  'Desk Lamp',
+  'Notebook',
+] as const;
+
 const catalog = fc.letrec<{
   product: Product;
   category: Category;
@@ -22,7 +47,7 @@ const catalog = fc.letrec<{
   // totals stay well inside Number.MAX_SAFE_INTEGER).
   product: fc.record({
     type: fc.constant('product' as const),
-    title: fc.string({ minLength: 1, maxLength: 12 }),
+    title: fc.constantFrom(...PRODUCT_TITLES),
     priceCents: fc.integer({ min: 1, max: 1_000_000 }),
   }),
 
