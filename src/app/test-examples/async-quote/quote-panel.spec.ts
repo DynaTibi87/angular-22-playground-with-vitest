@@ -27,19 +27,18 @@ describe('QuotePanel', () => {
     // zoneless change-detection scheduler relies on them to flush renders. If
     // we faked those too, `fixture.whenStable()` would wait forever for a
     // render timer that never fires.
-    vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+    vi.useFakeTimers();
 
     TestBed.configureTestingModule({
       imports: [QuotePanel],
     });
 
     fixture = TestBed.createComponent(QuotePanel);
+    fixture.autoDetectChanges();
     debugElement = fixture.debugElement;
     componentInstance = fixture.componentInstance;
 
     loadButton = debugElement.query(By.css('[data-testid="load"]'));
-
-    await fixture.whenStable();
   });
 
   afterEach(() => {
@@ -65,10 +64,12 @@ describe('QuotePanel', () => {
   });
 
   it('should show the loading state while the request is pending', async () => {
-    loadButton.nativeElement.click();
-    await fixture.whenStable();
-
+    // loadButton.nativeElement.click();
+    loadButton.triggerEventHandler('click');
+    // await fixture.whenStable();
+    // fixture.detectChanges();
     // The stream has not emitted yet - the timer is still pending.
+    vi.advanceTimersByTime(QuoteService.DELAY_MS - 1);
     expect(componentInstance.loading()).toBe(true);
     expect(componentInstance.quote()).toBe('');
     expect(loadingEl()).toBeTruthy();
@@ -81,7 +82,6 @@ describe('QuotePanel', () => {
     // Advance almost to the delay, but not quite. The async variant also
     // flushes any microtasks the stream queues along the way.
     await vi.advanceTimersByTimeAsync(QuoteService.DELAY_MS - 1);
-    // await fixture.whenStable();
 
     // Still loading: one millisecond short of the scheduled emission.
     expect(componentInstance.loading()).toBe(true);
@@ -96,9 +96,10 @@ describe('QuotePanel', () => {
 
     // Push the clock past the simulated network delay so the stream emits,
     // then wait for the resulting render to settle.
-    await vi.advanceTimersByTimeAsync(QuoteService.DELAY_MS);
-    await fixture.whenStable();
-
+    // await vi.advanceTimersByTimeAsync(QuoteService.DELAY_MS);
+    await vi.runAllTimersAsync();
+    // await fixture.whenStable();
+    // fixture.detectChanges();
     expect(componentInstance.loading()).toBe(false);
     expect(componentInstance.quote()).toBe(FUNNY_SENTENCES[0]);
     expect(loadingEl()).toBeNull();

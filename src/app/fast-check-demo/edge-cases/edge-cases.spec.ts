@@ -20,23 +20,26 @@ import {
   percentageOf,
   slugify,
 } from './edge-cases';
+import { VerbosityLevel } from 'fast-check';
 
 describe('average', () => {
   // Passes for non-empty arrays...
-  test.prop([fc.array(fc.integer(), { minLength: 1 })])(
-    'sits between the min and max of the values',
-    (values) => {
-      const result = average(values);
-      expect(result).toBeGreaterThanOrEqual(Math.min(...values));
-      expect(result).toBeLessThanOrEqual(Math.max(...values));
-    },
-  );
+  test.prop([fc.array(fc.integer(), { minLength: 1 })], {
+    verbose: VerbosityLevel.VeryVerbose,
+  })('sits between the min and max of the values', (values) => {
+    const result = average(values);
+    expect(result).toBeGreaterThanOrEqual(Math.min(...values));
+    expect(result).toBeLessThanOrEqual(Math.max(...values));
+  });
 
   // ...but this catches the empty-array / NaN bug. fast-check shrinks straight
   // to [].
-  test.prop([fc.array(fc.integer())])('always returns a finite number', (values) => {
-    expect(Number.isFinite(average(values))).toBe(true);
-  });
+  test.prop([fc.array(fc.integer())], { verbose: VerbosityLevel.VeryVerbose })(
+    'always returns a finite number',
+    (values) => {
+      expect(Number.isFinite(average(values))).toBe(true);
+    },
+  );
 });
 
 describe('clamp', () => {
@@ -100,12 +103,12 @@ describe('median', () => {
 
 describe('percentageOf', () => {
   // Catches division-by-zero: percentageOf(part, 0) yields NaN/Infinity.
-  test.prop([fc.integer({ min: 0, max: 1000 }), fc.integer({ min: 0, max: 1000 })])(
-    'always returns a finite percentage',
-    (part, total) => {
-      expect(Number.isFinite(percentageOf(part, total))).toBe(true);
-    },
-  );
+  test.prop([
+    fc.integer({ min: 0, max: 1000 }),
+    fc.integer({ min: 0, max: 1000 }),
+  ])('always returns a finite percentage', (part, total) => {
+    expect(Number.isFinite(percentageOf(part, total))).toBe(true);
+  });
 });
 
 describe('capitalize', () => {
@@ -114,6 +117,3 @@ describe('capitalize', () => {
     expect(capitalize(input)).toHaveLength(input.length);
   });
 });
-
-
-

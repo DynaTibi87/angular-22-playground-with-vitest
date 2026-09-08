@@ -8,6 +8,7 @@
 import { fc, test } from '@fast-check/vitest';
 import { describe, expect, it } from 'vitest';
 import { TruncatePipe, truncate } from './truncate.pipe';
+import { VerbosityLevel } from 'fast-check';
 
 // A non-negative integer limit, matching how the function normalises input.
 const limitArb = fc.nat({ max: 200 });
@@ -15,10 +16,12 @@ const limitArb = fc.nat({ max: 200 });
 const trailArb = fc.string({ maxLength: 5 });
 
 describe('truncate — pass-through of short strings', () => {
-  test.only.prop([fc.string({ maxLength: 200 }), limitArb, trailArb])(
+  test.prop([fc.string({ maxLength: 200 }), limitArb, trailArb], {
+    verbose: VerbosityLevel.VeryVerbose,
+  })(
     'returns the input unchanged when it already fits within the limit',
     (value, limit, trail) => {
-      console.log(value);
+      // console.log(value);
       if (value.length <= limit) {
         expect(truncate(value, limit, trail)).toBe(value);
       }

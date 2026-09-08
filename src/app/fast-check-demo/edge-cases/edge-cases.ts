@@ -14,6 +14,7 @@
 // FIX: guard the empty case, e.g.
 //   if (values.length === 0) return 0; // or throw, depending on the contract
 export function average(values: number[]): number {
+  if (values.length === 0) return 0; // or throw, depending on the contract
   const sum = values.reduce((total, value) => total + value, 0);
   return sum / values.length;
 }
@@ -94,6 +95,3 @@ export function percentageOf(part: number, total: number): number {
 export function capitalize(input: string): string {
   return input[0].toUpperCase() + input.slice(1);
 }
-
-
-
