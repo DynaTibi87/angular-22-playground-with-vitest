@@ -1,4 +1,10 @@
-import { Component, DebugElement, input, signal } from '@angular/core';
+import {
+  Component,
+  DebugElement,
+  input,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { inputBinding } from '@angular/core';
@@ -27,7 +33,7 @@ describe('ProfileCard (nested components)', () => {
   let debugElement: DebugElement;
 
   // Drives the parent's required `profile` input, mirroring `[profile]="..."`.
-  let profile: ReturnType<typeof signal<Profile>>;
+  let profile: WritableSignal<Profile>;
 
   // Spy on the real child's collaborator BEFORE the component is created, so a
   // "was never called" assertion is meaningful. Spying on the prototype covers

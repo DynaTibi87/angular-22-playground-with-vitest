@@ -204,9 +204,8 @@ describe('CartService', () => {
       service.loadCatalog().subscribe();
 
       const req = httpTesting.expectOne(CartService.CATALOG_URL);
+      // const req = httpTesting.expectOne('https://shop.example.com/api/product');
       expect(req.request.method).toBe('GET');
-
-      req.flush([]);
     });
 
     it('should emit the products returned by the server', () => {
@@ -229,7 +228,7 @@ describe('CartService', () => {
 
       httpTesting
         .expectOne(CartService.CATALOG_URL)
-        .flush('Boom', { status: 500, statusText: 'Server Error' });
+        .flush('Error', { status: 500, statusText: 'Server Error' });
 
       expect(status).toBe(500);
     });
