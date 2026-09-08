@@ -162,11 +162,16 @@ function formatPlacedLabel(iso: string | null): string {
 
 // The gross (pre-discount) and discount totals for a single line, in cents.
 // Kept separate so the adapter's totals fold cleanly and stay property-testable.
-function lineTotals(item: BackendLineItem): { gross: number; discount: number } {
+function lineTotals(item: BackendLineItem): {
+  gross: number;
+  discount: number;
+} {
   const quantity = normalizeQuantity(item.quantity);
   const unitPrice = normalizeUnitPriceCents(item.unit_price_cents);
   const gross = quantity * unitPrice;
-  const discount = Math.round((gross * normalizeDiscountPct(item.discount_pct)) / 100);
+  const discount = Math.round(
+    (gross * normalizeDiscountPct(item.discount_pct)) / 100,
+  );
   return { gross, discount };
 }
 
@@ -215,7 +220,3 @@ export function adaptOrder(backend: BackendOrder): UIOrder {
     isEmpty: items.length === 0,
   };
 }
-
-
-
-

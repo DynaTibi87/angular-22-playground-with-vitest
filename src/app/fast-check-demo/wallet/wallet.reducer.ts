@@ -6,11 +6,7 @@
 // never negative, balance always equals the folded history) hold no matter what.
 import { createFeature, createReducer, createSelector, on } from '@ngrx/store';
 import { WalletActions } from './wallet.actions';
-import {
-  Transaction,
-  WalletState,
-  initialWalletState,
-} from './wallet.model';
+import { Transaction, WalletState, initialWalletState } from './wallet.model';
 import {
   applyDeposit,
   applyWithdrawal,
@@ -49,7 +45,12 @@ export const walletReducer = createReducer(
     if (!isValidAmount(amount)) {
       return { ...state, error: 'Enter a positive whole amount of cents.' };
     }
-    return record(state, 'deposit', amount, applyDeposit(state.balance, amount));
+    return record(
+      state,
+      'deposit',
+      amount,
+      applyDeposit(state.balance, amount),
+    );
   }),
 
   on(WalletActions.withdraw, (state, { amount }): WalletState => {
@@ -66,10 +67,13 @@ export const walletReducer = createReducer(
 
   on(WalletActions.reset, (): WalletState => initialWalletState),
 
-  on(WalletActions.clearError, (state): WalletState => ({
-    ...state,
-    error: null,
-  })),
+  on(
+    WalletActions.clearError,
+    (state): WalletState => ({
+      ...state,
+      error: null,
+    }),
+  ),
 );
 
 // `createFeature` wires the reducer to a named slice and auto-generates a
@@ -99,4 +103,3 @@ export const walletFeature = createFeature({
     selectDerivedBalance: createSelector(selectTransactions, computeBalance),
   }),
 });
-

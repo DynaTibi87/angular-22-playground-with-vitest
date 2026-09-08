@@ -6,7 +6,11 @@
 import { BackendLineItem, BackendOrder } from './order.adapter';
 
 const NAMES = ['Ada Lovelace', 'Grace Hopper', 'Alan Turing', '   ', ''];
-const EMAILS: (string | null)[] = ['ada@example.com', 'grace@example.com', null];
+const EMAILS: (string | null)[] = [
+  'ada@example.com',
+  'grace@example.com',
+  null,
+];
 const TIERS = ['BRONZE', 'SILVER', 'GOLD', 'PLATINUM', ''];
 const CURRENCIES = ['USD', 'EUR', 'GBP', 'JPY', ''];
 const STATUSES = ['PENDING', 'PAID', 'SHIPPED', 'CANCELLED', 'REFUNDED', ''];
@@ -56,10 +60,11 @@ export function generateOrderScenario(): BackendOrder {
       email: pick(EMAILS),
       loyalty_tier: pick(TIERS),
     },
-    line_items: Array.from({ length: lineCount }, (_, i) => generateLineItem(i)),
+    line_items: Array.from({ length: lineCount }, (_, i) =>
+      generateLineItem(i),
+    ),
     currency: pick(CURRENCIES),
     placed_at: pick(PLACED),
     status: pick(STATUSES),
   };
 }
-

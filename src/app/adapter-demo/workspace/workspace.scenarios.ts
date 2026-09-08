@@ -52,4 +52,3 @@ export function generateBackendScenario(): BackendWorkspace {
     trial_ends_at: pick(TRIALS),
   };
 }
-

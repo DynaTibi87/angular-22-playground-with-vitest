@@ -72,7 +72,10 @@ export const ROLE_MAPPING: Record<UserRole, string> = {
 };
 
 // A role may edit settings only when it is elevated *and* the account is healthy.
-const EDITING_ROLES: ReadonlySet<string> = new Set<UserRole>(['ADMIN', 'MANAGER']);
+const EDITING_ROLES: ReadonlySet<string> = new Set<UserRole>([
+  'ADMIN',
+  'MANAGER',
+]);
 
 // Safe dictionary lookup. Checking own-ness (rather than a bare index) keeps
 // inherited keys like "toString" or "constructor" from resolving to a truthy
@@ -169,7 +172,3 @@ export function adaptWorkspace(backend: BackendWorkspace): UIWorkspace {
     trialLabel: formatTrialLabel(backend.trial_ends_at),
   };
 }
-
-
-
-

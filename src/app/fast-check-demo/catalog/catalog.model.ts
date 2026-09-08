@@ -25,4 +25,3 @@ export interface Category {
 // A node is either a leaf or a branch — a classic discriminated union, and the
 // recursive type at the heart of the example.
 export type CatalogNode = Product | Category;
-

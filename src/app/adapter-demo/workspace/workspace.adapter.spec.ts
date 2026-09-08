@@ -99,10 +99,13 @@ describe('adaptWorkspace — structural invariants', () => {
     },
   );
 
-  test.prop([anyBackend])('null verification always coerces to false', (backend) => {
-    const ui = adaptWorkspace({ ...backend, is_verified: null });
-    expect(ui.verified).toBe(false);
-  });
+  test.prop([anyBackend])(
+    'null verification always coerces to false',
+    (backend) => {
+      const ui = adaptWorkspace({ ...backend, is_verified: null });
+      expect(ui.verified).toBe(false);
+    },
+  );
 });
 
 // ---------------------------------------------------------------------------
@@ -112,7 +115,9 @@ describe('adaptWorkspace — structural invariants', () => {
 describe('adaptWorkspace — known-value mapping', () => {
   const knownBackend: fc.Arbitrary<BackendWorkspace> = fc.record({
     workspace_id: fc.uuid(),
-    display_name: fc.string({ minLength: 1 }).filter((s) => s.trim().length > 0),
+    display_name: fc
+      .string({ minLength: 1 })
+      .filter((s) => s.trim().length > 0),
     user_role: fc.constantFrom(...KNOWN_ROLES),
     account_status: fc.constantFrom(...KNOWN_STATUSES),
     seat_count: fc.integer({ min: 0, max: 500 }),
@@ -176,7 +181,9 @@ describe('adaptWorkspace — banner business rules', () => {
   test.prop([anyRole])(
     'a LOCKED account blocks editing for every role',
     (role) => {
-      const ui = adaptWorkspace(base({ account_status: 'LOCKED', user_role: role }));
+      const ui = adaptWorkspace(
+        base({ account_status: 'LOCKED', user_role: role }),
+      );
       expect(ui.canEditSettings).toBe(false);
       expect(ui.bannerMessage).toBe('Account locked. Contact support.');
     },
@@ -185,7 +192,9 @@ describe('adaptWorkspace — banner business rules', () => {
   test.prop([fc.constantFrom(...KNOWN_ROLES)])(
     'a PAST_DUE account differentiates the billing banner for admins',
     (role) => {
-      const ui = adaptWorkspace(base({ account_status: 'PAST_DUE', user_role: role }));
+      const ui = adaptWorkspace(
+        base({ account_status: 'PAST_DUE', user_role: role }),
+      );
       expect(ui.canEditSettings).toBe(false);
       if (role === 'ADMIN') {
         expect(ui.bannerMessage).toContain('update your billing information');
@@ -198,7 +207,9 @@ describe('adaptWorkspace — banner business rules', () => {
   test.prop([fc.constantFrom(...KNOWN_ROLES)])(
     'an ACTIVE account lets only admins and managers edit',
     (role) => {
-      const ui = adaptWorkspace(base({ account_status: 'ACTIVE', user_role: role }));
+      const ui = adaptWorkspace(
+        base({ account_status: 'ACTIVE', user_role: role }),
+      );
       const elevated = role === 'ADMIN' || role === 'MANAGER';
       expect(ui.canEditSettings).toBe(elevated);
     },
@@ -217,11 +228,14 @@ describe('normalizeSeats', () => {
     },
   );
 
-  test.prop([fc.double()])('never returns a negative or fractional value', (n) => {
-    const seats = normalizeSeats(n);
-    expect(seats).toBeGreaterThanOrEqual(0);
-    expect(Number.isInteger(seats)).toBe(true);
-  });
+  test.prop([fc.double()])(
+    'never returns a negative or fractional value',
+    (n) => {
+      const seats = normalizeSeats(n);
+      expect(seats).toBeGreaterThanOrEqual(0);
+      expect(Number.isInteger(seats)).toBe(true);
+    },
+  );
 });
 
 describe('formatTrialLabel', () => {
@@ -262,5 +276,3 @@ function base(overrides: Partial<BackendWorkspace>): BackendWorkspace {
     ...overrides,
   };
 }
-
-

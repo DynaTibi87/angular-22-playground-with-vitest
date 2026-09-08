@@ -22,11 +22,13 @@ const transaction: fc.Arbitrary<Transaction> = fc.record({
 });
 
 // A generator for a whole, internally-consistent wallet slice.
-const walletState: fc.Arbitrary<WalletState> = fc.array(transaction).map((txs) => ({
-  transactions: txs,
-  balance: computeBalance(txs),
-  error: null,
-}));
+const walletState: fc.Arbitrary<WalletState> = fc
+  .array(transaction)
+  .map((txs) => ({
+    transactions: txs,
+    balance: computeBalance(txs),
+    error: null,
+  }));
 
 describe('wallet selectors', () => {
   it('exposes the auto-generated slice selectors', () => {
@@ -85,4 +87,3 @@ describe('wallet selectors', () => {
     expect(walletFeature.selectWithdrawalCount(state)).toBe(1);
   });
 });
-

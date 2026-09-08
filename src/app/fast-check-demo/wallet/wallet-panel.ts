@@ -105,4 +105,3 @@ export class WalletPanel {
     this.store.dispatch(WalletActions.clearError());
   }
 }
-

@@ -91,4 +91,3 @@ export class TruncatePanel {
     this.trail.set((event.target as HTMLInputElement).value);
   }
 }
-

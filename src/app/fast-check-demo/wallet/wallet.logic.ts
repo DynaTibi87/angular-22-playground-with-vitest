@@ -65,4 +65,3 @@ export function formatCents(cents: number): string {
   const remainder = abs % 100;
   return `${sign}$${dollars}.${remainder.toString().padStart(2, '0')}`;
 }
-

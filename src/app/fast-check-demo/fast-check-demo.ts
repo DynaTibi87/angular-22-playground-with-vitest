@@ -24,4 +24,3 @@ export class FastCheckDemo {
     'truncate is idempotent: truncating twice equals truncating once.',
   ];
 }
-

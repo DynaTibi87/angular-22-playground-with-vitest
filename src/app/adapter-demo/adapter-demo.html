@@ -2,8 +2,9 @@
   <h1>Adapting backend payloads with fast-check</h1>
   <p>
     A pure backend → UI <strong>adapter</strong> is a great fit for
-    <a href="https://fast-check.dev" target="_blank" rel="noreferrer">fast-check</a>:
-    generate thousands of realistic — and hostile — payloads and prove the
+    <a href="https://fast-check.dev" target="_blank" rel="noreferrer"
+      >fast-check</a
+    >: generate thousands of realistic — and hostile — payloads and prove the
     mapping rules always hold. Press <em>Generate</em> to draw a new scenario
     from a range of possible backend responses.
   </p>
@@ -46,14 +47,18 @@
           </span>
         </p>
 
-        <p data-testid="banner" class="ui-model__banner">{{ ui().bannerMessage }}</p>
+        <p data-testid="banner" class="ui-model__banner">
+          {{ ui().bannerMessage }}
+        </p>
 
         <dl class="ui-model__grid">
           <dt>Role</dt>
           <dd data-testid="role">{{ ui().roleLabel }}</dd>
 
           <dt>Can edit settings</dt>
-          <dd data-testid="can-edit">{{ ui().canEditSettings ? 'Yes' : 'No' }}</dd>
+          <dd data-testid="can-edit">
+            {{ ui().canEditSettings ? 'Yes' : 'No' }}
+          </dd>
 
           <dt>Seats</dt>
           <dd data-testid="seats">{{ ui().seats }}</dd>
@@ -75,7 +80,9 @@
       <code>line_items</code> with quantities, prices and discounts.
     </p>
     <div class="widget__body">
-      <pre data-testid="order-backend" class="payload">{{ order() | json }}</pre>
+      <pre data-testid="order-backend" class="payload">
+{{ order() | json }}</pre
+      >
     </div>
   </article>
 
@@ -113,20 +120,20 @@
         </dl>
 
         @if (orderUi().isEmpty) {
-          <p data-testid="order-empty" class="ui-model__banner">
-            This order has no line items yet.
-          </p>
+        <p data-testid="order-empty" class="ui-model__banner">
+          This order has no line items yet.
+        </p>
         } @else {
-          <ul data-testid="order-lines" class="order-lines">
-            @for (line of orderUi().items; track line.sku) {
-              <li>
-                <span class="order-lines__name">
-                  {{ line.quantity }}× {{ line.name }}
-                </span>
-                <span class="order-lines__total">{{ line.lineTotalLabel }}</span>
-              </li>
-            }
-          </ul>
+        <ul data-testid="order-lines" class="order-lines">
+          @for (line of orderUi().items; track line.sku) {
+          <li>
+            <span class="order-lines__name">
+              {{ line.quantity }}× {{ line.name }}
+            </span>
+            <span class="order-lines__total">{{ line.lineTotalLabel }}</span>
+          </li>
+          }
+        </ul>
         }
 
         <dl class="ui-model__grid order-totals">
@@ -143,5 +150,3 @@
     </div>
   </article>
 </section>
-
-

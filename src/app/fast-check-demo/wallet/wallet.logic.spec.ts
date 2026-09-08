@@ -32,9 +32,12 @@ const transaction: fc.Arbitrary<Transaction> = fc.record({
 });
 
 describe('isValidAmount', () => {
-  test.prop([validAmount])('accepts positive whole cents in range', (amount) => {
-    expect(isValidAmount(amount)).toBe(true);
-  });
+  test.prop([validAmount])(
+    'accepts positive whole cents in range',
+    (amount) => {
+      expect(isValidAmount(amount)).toBe(true);
+    },
+  );
 
   test.prop([fc.integer({ min: -MAX_AMOUNT, max: 0 })])(
     'rejects zero and negatives',
@@ -87,9 +90,12 @@ describe('computeBalance', () => {
 });
 
 describe('applyDeposit', () => {
-  test.prop([balance, validAmount])('increases the balance by the amount', (b, a) => {
-    expect(applyDeposit(b, a)).toBe(b + a);
-  });
+  test.prop([balance, validAmount])(
+    'increases the balance by the amount',
+    (b, a) => {
+      expect(applyDeposit(b, a)).toBe(b + a);
+    },
+  );
 
   test.prop([balance, validAmount, validAmount])(
     'is commutative in the order of deposits',
@@ -132,13 +138,19 @@ describe('applyWithdrawal', () => {
 });
 
 describe('formatCents', () => {
-  test.prop([fc.integer()])('always renders exactly two decimal places', (cents) => {
-    expect(formatCents(cents)).toMatch(/^-?\$\d+\.\d{2}$/);
-  });
+  test.prop([fc.integer()])(
+    'always renders exactly two decimal places',
+    (cents) => {
+      expect(formatCents(cents)).toMatch(/^-?\$\d+\.\d{2}$/);
+    },
+  );
 
-  test.prop([fc.nat()])('never prefixes a sign for non-negative amounts', (cents) => {
-    expect(formatCents(cents).startsWith('-')).toBe(false);
-  });
+  test.prop([fc.nat()])(
+    'never prefixes a sign for non-negative amounts',
+    (cents) => {
+      expect(formatCents(cents).startsWith('-')).toBe(false);
+    },
+  );
 
   test.prop([fc.nat({ max: MAX_AMOUNT })])(
     'round-trips back to the original cent amount',
@@ -157,4 +169,3 @@ describe('formatCents', () => {
     expect(formatCents(-1234)).toBe('-$12.34');
   });
 });
-

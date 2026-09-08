@@ -2,7 +2,7 @@
 
 A focused companion to the
 [Angular + Vitest Testing guide](./angular-vitest-testing-guide.md). Where that
-document covers *example-based* testing, this one introduces **property-based
+document covers _example-based_ testing, this one introduces **property-based
 testing** with [fast-check](https://fast-check.dev) and walks through the live
 **Wallet** feature that ships under `src/app/fast-check-demo/`.
 
@@ -15,7 +15,7 @@ Sources this guide builds on:
 
 > **Audience:** developers who already write example-based specs and want to add
 > property-based tests where they pay off.
-> **Goal:** understand *what* a property is, *when* to reach for one, and *how*
+> **Goal:** understand _what_ a property is, _when_ to reach for one, and _how_
 > to test pure logic, an NgRx reducer, selectors, and a component together.
 >
 > **See also:** [Adapter Testing Findings](./adapter-testing-findings.md) — real
@@ -34,9 +34,9 @@ it('formats 1234 cents as $12.34', () => {
 ```
 
 That's precise and readable, but it only proves the one case you thought of.
-Bugs love the cases you *didn't* think of (0, negatives, huge numbers, `NaN`).
+Bugs love the cases you _didn't_ think of (0, negatives, huge numbers, `NaN`).
 
-A **property-based** test states a rule that must hold for *all* inputs, and lets
+A **property-based** test states a rule that must hold for _all_ inputs, and lets
 fast-check generate hundreds of them to try to break it:
 
 ```ts
@@ -51,12 +51,12 @@ If any generated value fails, fast-check **shrinks** it to the smallest
 counterexample (e.g. it reports `-1` instead of some random `-83719`) and prints
 a `seed`/`path` you can use to replay the exact failure.
 
-| | Example-based | Property-based |
-| --- | --- | --- |
-| Inputs | Hand-picked | Generated (100 runs by default) |
-| Finds unknown edge cases | Rarely | Often |
-| Best for | Specific behaviours, error messages, UI wiring | Pure functions, invariants, round-trips |
-| Failure output | Your assertion | A **shrunk**, minimal counterexample + replay seed |
+|                          | Example-based                                  | Property-based                                     |
+| ------------------------ | ---------------------------------------------- | -------------------------------------------------- |
+| Inputs                   | Hand-picked                                    | Generated (100 runs by default)                    |
+| Finds unknown edge cases | Rarely                                         | Often                                              |
+| Best for                 | Specific behaviours, error messages, UI wiring | Pure functions, invariants, round-trips            |
+| Failure output           | Your assertion                                 | A **shrunk**, minimal counterexample + replay seed |
 
 The two are complementary. This repo uses **both**: properties for the rules,
 examples for the exact behaviours and messages.
@@ -84,7 +84,7 @@ import { describe, expect, it } from 'vitest';
 fast-check offers the same power through two APIs. They are equivalent — the
 first is just the ergonomic Vitest wrapper around the second.
 
-**`test.prop([...])` / `it.prop([...])`** — from `@fast-check/vitest`. This *is*
+**`test.prop([...])` / `it.prop([...])`** — from `@fast-check/vitest`. This _is_
 the test: the bridge registers the Vitest test **and** runs the property in one
 call, so there's no boilerplate. This is what the repo's specs use.
 
@@ -101,7 +101,7 @@ test.prop([anyOrder])('total equals subtotal minus discount', (order) => {
 
 **`fc.assert(fc.property(...))`** — the core `fast-check` API. It's
 framework-agnostic (works in any runner) but does **not** register a test, so it
-must live *inside* a normal `it`/`test` block:
+must live _inside_ a normal `it`/`test` block:
 
 ```ts
 import * as fc from 'fast-check';
@@ -119,17 +119,17 @@ it('total equals subtotal minus discount', () => {
 });
 ```
 
-| | `test.prop([...])` | `fc.assert(fc.property(...))` |
-| --- | --- | --- |
-| Package | `@fast-check/vitest` (bridge) | `fast-check` (core) |
-| Registers the test? | Yes — it *is* the test | No — needs an enclosing `it`/`test` |
-| Boilerplate | None | Explicit `assert` + `property` |
-| Runner coupling | Vitest-specific | Any runner (Vitest, Jest, Node…) |
-| Runner options | 2nd arg: `test.prop([...], { seed, numRuns })(...)` | 2nd arg: `fc.assert(prop, { seed, numRuns })` |
+|                     | `test.prop([...])`                                  | `fc.assert(fc.property(...))`                 |
+| ------------------- | --------------------------------------------------- | --------------------------------------------- |
+| Package             | `@fast-check/vitest` (bridge)                       | `fast-check` (core)                           |
+| Registers the test? | Yes — it _is_ the test                              | No — needs an enclosing `it`/`test`           |
+| Boilerplate         | None                                                | Explicit `assert` + `property`                |
+| Runner coupling     | Vitest-specific                                     | Any runner (Vitest, Jest, Node…)              |
+| Runner options      | 2nd arg: `test.prop([...], { seed, numRuns })(...)` | 2nd arg: `fc.assert(prop, { seed, numRuns })` |
 
 **Which to use here:** prefer **`test.prop`** for clean Vitest specs (all the
 specs in this repo do). Reach for raw **`fc.assert`** only when you need a
-property *inside* an existing example test, or in code that isn't Vitest-bound.
+property _inside_ an existing example test, or in code that isn't Vitest-bound.
 
 > The scratch guide `fast-check-complex.md` uses the core `fc.assert` style;
 > translating it to this repo means swapping `import * as fc from 'fast-check'` +
@@ -141,15 +141,19 @@ property *inside* an existing example test, or in code that isn't Vitest-bound.
 ## 3. Anatomy of a property
 
 ```ts
-test.prop([fc.integer({ min: 1, max: 1000 }), fc.integer({ min: 1, max: 1000 })])(
-  'addition is commutative',   // 1. a descriptive name
-  (a, b) => {                  // 2. args match the arbitraries, in order
+test.prop([
+  fc.integer({ min: 1, max: 1000 }),
+  fc.integer({ min: 1, max: 1000 }),
+])(
+  'addition is commutative', // 1. a descriptive name
+  (a, b) => {
+    // 2. args match the arbitraries, in order
     expect(a + b).toBe(b + a); // 3. an assertion (or return a boolean)
   },
 );
 ```
 
-1. **Arbitraries** — `fc.integer(...)` etc. describe *how to generate* inputs.
+1. **Arbitraries** — `fc.integer(...)` etc. describe _how to generate_ inputs.
    You pass them as an array (positional args) or as a record (named args).
 2. **The predicate** — runs once per generated sample. Throw/`expect`-fail to
    signal a violation, or return `false`.
@@ -157,18 +161,18 @@ test.prop([fc.integer({ min: 1, max: 1000 }), fc.integer({ min: 1, max: 1000 })]
 
 ### Choosing arbitraries
 
-| Need | Arbitrary |
-| --- | --- |
-| Any integer | `fc.integer()` |
-| Bounded integer | `fc.integer({ min, max })` |
-| Non-negative integer | `fc.nat()` |
-| Floating point | `fc.float()`, `fc.double()` |
-| Text | `fc.string()` |
-| One of a set | `fc.constantFrom('a', 'b')` |
-| Object shape | `fc.record({ id: fc.string(), amount: fc.nat() })` |
-| List | `fc.array(itemArb, { maxLength })` |
-| Either/or | `fc.oneof(arbA, arbB)` |
-| Derive/transform | `arb.map(fn)`, `arb.filter(pred)` |
+| Need                 | Arbitrary                                          |
+| -------------------- | -------------------------------------------------- |
+| Any integer          | `fc.integer()`                                     |
+| Bounded integer      | `fc.integer({ min, max })`                         |
+| Non-negative integer | `fc.nat()`                                         |
+| Floating point       | `fc.float()`, `fc.double()`                        |
+| Text                 | `fc.string()`                                      |
+| One of a set         | `fc.constantFrom('a', 'b')`                        |
+| Object shape         | `fc.record({ id: fc.string(), amount: fc.nat() })` |
+| List                 | `fc.array(itemArb, { maxLength })`                 |
+| Either/or            | `fc.oneof(arbA, arbB)`                             |
+| Derive/transform     | `arb.map(fn)`, `arb.filter(pred)`                  |
 
 > **Tip:** bound your domain (`{ min, max, maxLength }`) to keep generated data
 > realistic and tests fast. In the Wallet feature, amounts are whole **cents**
@@ -178,18 +182,18 @@ test.prop([fc.integer({ min: 1, max: 1000 }), fc.integer({ min: 1, max: 1000 })]
 
 ## 4. Good properties to look for
 
-Reaching for the right *kind* of property is most of the skill. Common patterns:
+Reaching for the right _kind_ of property is most of the skill. Common patterns:
 
 - **Round-trip / inverse** — `decode(encode(x)) === x`.
-  Wallet: *deposit then withdraw the same amount is a no-op.*
+  Wallet: _deposit then withdraw the same amount is a no-op._
 - **Invariant** — something that is always true after any operation.
-  Wallet: *the balance is never negative* and *always equals the folded history.*
+  Wallet: _the balance is never negative_ and _always equals the folded history._
 - **Commutativity / order-independence** — `f(a, b) === f(b, a)`.
-  Wallet: *deposits commute — order doesn't change the final balance.*
+  Wallet: _deposits commute — order doesn't change the final balance._
 - **Idempotence** — `f(f(x)) === f(x)`.
-  Wallet: *reset from anywhere yields the initial state.*
+  Wallet: _reset from anywhere yields the initial state._
 - **Oracle / model** — compare against a simpler reference implementation.
-  Wallet: *the reducer's balance matches `computeBalance(transactions)`.*
+  Wallet: _the reducer's balance matches `computeBalance(transactions)`._
 - **Metamorphic** — a known change to the input causes a known change to the
   output (e.g. reversing a list doesn't change its sum).
 
@@ -311,12 +315,12 @@ TestBed.configureTestingModule({
 
 ## 6. When to use which
 
-| Layer | Nature | Reach for |
-| --- | --- | --- |
-| Pure domain logic | Total, deterministic | **Properties** (round-trips, invariants) + a few examples |
-| NgRx reducer | Pure `(state, action) => state` | **Properties** over random action sequences + example per action |
-| NgRx selectors | Pure projections | **Properties** (`.projector`) + examples |
-| Component | Reads state, dispatches | **Example-based** with the real store |
+| Layer             | Nature                          | Reach for                                                        |
+| ----------------- | ------------------------------- | ---------------------------------------------------------------- |
+| Pure domain logic | Total, deterministic            | **Properties** (round-trips, invariants) + a few examples        |
+| NgRx reducer      | Pure `(state, action) => state` | **Properties** over random action sequences + example per action |
+| NgRx selectors    | Pure projections                | **Properties** (`.projector`) + examples                         |
+| Component         | Reads state, dispatches         | **Example-based** with the real store                            |
 
 Rule of thumb: **the more a unit looks like a pure function, the more a property
 earns its keep.** Push logic into pure functions and reducers, and the valuable
@@ -362,7 +366,10 @@ test.prop({ a: fc.nat(), b: fc.nat() })('named', ({ a, b }) => {
 
 // Compose & constrain
 const validAmount = fc.integer({ min: 1, max: 1_000 });
-const tx = fc.record({ kind: fc.constantFrom('deposit', 'withdrawal'), amount: validAmount });
+const tx = fc.record({
+  kind: fc.constantFrom('deposit', 'withdrawal'),
+  amount: validAmount,
+});
 const history = fc.array(tx, { maxLength: 20 });
 ```
 
@@ -371,4 +378,3 @@ Run everything with:
 ```bash
 npm test            # nx test → vitest run
 ```
-

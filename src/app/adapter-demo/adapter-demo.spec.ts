@@ -125,8 +125,20 @@ describe('AdapterDemo', () => {
         loyalty_tier: 'GOLD',
       },
       line_items: [
-        { sku: 'SKU-001', name: 'Keyboard', quantity: 2, unit_price_cents: 5000, discount_pct: 10 },
-        { sku: 'SKU-002', name: 'Mouse', quantity: 1, unit_price_cents: 2000, discount_pct: null },
+        {
+          sku: 'SKU-001',
+          name: 'Keyboard',
+          quantity: 2,
+          unit_price_cents: 5000,
+          discount_pct: 10,
+        },
+        {
+          sku: 'SKU-002',
+          name: 'Mouse',
+          quantity: 1,
+          unit_price_cents: 2000,
+          discount_pct: null,
+        },
       ],
       currency: 'USD',
       placed_at: null,
@@ -161,7 +173,3 @@ describe('AdapterDemo', () => {
     expect(text('order-total')).toContain('¤0.00');
   });
 });
-
-
-
-

@@ -131,4 +131,3 @@ describe('stat formulas', () => {
     expect(totalValueCents(tree)).toBe(7500);
   });
 });
-

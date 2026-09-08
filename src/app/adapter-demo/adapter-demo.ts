@@ -43,6 +43,3 @@ export class AdapterDemo {
     this.order.set(generateOrderScenario());
   }
 }
-
-
-

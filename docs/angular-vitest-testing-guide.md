@@ -7,7 +7,7 @@ standalone, signals) application with **Vitest**. It distills the official
 specs under `src/app/test-examples/`.
 
 > **Audience:** developers writing or reviewing tests in this repo.
-> **Goal:** understand *why* each tool exists and *when* to reach for it.
+> **Goal:** understand _why_ each tool exists and _when_ to reach for it.
 
 > **See also:** [Property-Based Testing with fast-check](./property-based-testing-guide.md)
 > — a companion guide covering the `/fast-check` NgRx Wallet feature and when to
@@ -17,15 +17,15 @@ specs under `src/app/test-examples/`.
 
 ## 1. The stack at a glance
 
-| Layer | Choice | Why it matters for tests |
-| --- | --- | --- |
-| Framework | Angular 22, **zoneless** | No `zone.js`; change detection is signal-driven. You `await fixture.whenStable()` instead of calling `detectChanges()` by hand. |
-| Components | **Standalone** | You **import** components in `TestBed`, never `declare` them. |
-| State | **Signals** | Assert on `signal()` values directly and read rendered DOM. |
-| Test runner | **Vitest** | Fast, Jest-compatible API (`describe/it/expect`), `vi` for mocks/timers, native ESM + TS. |
-| Angular bridge | `@analogjs/vitest-angular` | Compiles Angular for Vite/Vitest and registers the zoneless `TestBed`. |
-| DOM | **jsdom** | A simulated browser DOM in Node — no real browser needed for unit/component tests. |
-| E2E | **Playwright** (`e2e/`) | Real-browser end-to-end tests, separate from Vitest. |
+| Layer          | Choice                     | Why it matters for tests                                                                                                        |
+| -------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Framework      | Angular 22, **zoneless**   | No `zone.js`; change detection is signal-driven. You `await fixture.whenStable()` instead of calling `detectChanges()` by hand. |
+| Components     | **Standalone**             | You **import** components in `TestBed`, never `declare` them.                                                                   |
+| State          | **Signals**                | Assert on `signal()` values directly and read rendered DOM.                                                                     |
+| Test runner    | **Vitest**                 | Fast, Jest-compatible API (`describe/it/expect`), `vi` for mocks/timers, native ESM + TS.                                       |
+| Angular bridge | `@analogjs/vitest-angular` | Compiles Angular for Vite/Vitest and registers the zoneless `TestBed`.                                                          |
+| DOM            | **jsdom**                  | A simulated browser DOM in Node — no real browser needed for unit/component tests.                                              |
+| E2E            | **Playwright** (`e2e/`)    | Real-browser end-to-end tests, separate from Vitest.                                                                            |
 
 ### How it's wired together
 
@@ -37,8 +37,8 @@ setup file:
 export default defineConfig({
   plugins: [angular()],
   test: {
-    globals: true,              // describe/it/expect available without imports
-    environment: 'jsdom',       // a DOM in Node
+    globals: true, // describe/it/expect available without imports
+    environment: 'jsdom', // a DOM in Node
     setupFiles: ['src/test-setup.ts'],
     include: ['src/**/*.spec.ts'],
     server: { deps: { inline: [/@angular/, /fesm2022/] } },
@@ -50,10 +50,10 @@ export default defineConfig({
 this is what makes `TestBed` match the running app:
 
 ```ts
-import '@angular/compiler';                          // JIT compile at test time
-import '@analogjs/vitest-angular/setup-snapshots';   // fixture snapshot serializers
+import '@angular/compiler'; // JIT compile at test time
+import '@analogjs/vitest-angular/setup-snapshots'; // fixture snapshot serializers
 import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
-setupTestBed();                                      // zoneless TestBed
+setupTestBed(); // zoneless TestBed
 ```
 
 Run the suite with:
@@ -74,8 +74,12 @@ Vitest's API mirrors Jest, so most testing knowledge transfers directly.
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 describe('feature', () => {
-  beforeEach(() => { /* fresh setup per test */ });
-  afterEach(() => { /* cleanup: restore spies/timers */ });
+  beforeEach(() => {
+    /* fresh setup per test */
+  });
+  afterEach(() => {
+    /* cleanup: restore spies/timers */
+  });
 
   it('should do something', () => {
     expect(1 + 1).toBe(2);
@@ -86,7 +90,7 @@ describe('feature', () => {
 - **`describe`** groups related tests. Nest it to separate "rendering" from
   "interactions" (see `counter.spec.ts`).
 - **`it`** (alias `test`) is a single test. Name it as a specification:
-  *"should merge quantities when the same product is added again"*.
+  _"should merge quantities when the same product is added again"_.
 - **`beforeEach`** runs before every test — the place to build a fresh fixture so
   tests never share state.
 - **`afterEach`** is where you **undo global changes**: `vi.useRealTimers()`,
@@ -96,22 +100,22 @@ describe('feature', () => {
 
 Common matchers used throughout the suite:
 
-| Matcher | Use |
-| --- | --- |
-| `toBe` | Strict `===` (primitives, identity) |
-| `toEqual` | Deep structural equality (objects, arrays) |
-| `toBeTruthy` / `toBeNull` | Presence / absence (e.g. queried DOM nodes) |
-| `toContain` | Substring in text, or item in array |
-| `toBeInstanceOf` | Type checks (e.g. an activated route component) |
-| `toBeCloseTo` | Float math (money totals) — avoids rounding flake |
-| `toHaveBeenCalledWith` / `toHaveBeenCalledTimes` / `not.toHaveBeenCalled` | Spy assertions |
+| Matcher                                                                   | Use                                               |
+| ------------------------------------------------------------------------- | ------------------------------------------------- |
+| `toBe`                                                                    | Strict `===` (primitives, identity)               |
+| `toEqual`                                                                 | Deep structural equality (objects, arrays)        |
+| `toBeTruthy` / `toBeNull`                                                 | Presence / absence (e.g. queried DOM nodes)       |
+| `toContain`                                                               | Substring in text, or item in array               |
+| `toBeInstanceOf`                                                          | Type checks (e.g. an activated route component)   |
+| `toBeCloseTo`                                                             | Float math (money totals) — avoids rounding flake |
+| `toHaveBeenCalledWith` / `toHaveBeenCalledTimes` / `not.toHaveBeenCalled` | Spy assertions                                    |
 
 ### Mocks, spies & stubs with `vi`
 
 - **`vi.fn()`** — a standalone mock function. Use it as a fake collaborator
   (`{ provide: X, useValue: { method: vi.fn() } }`).
 - **`vi.spyOn(obj, 'method')`** — wraps a real method so you can observe calls
-  *and* optionally replace behaviour. By default it **calls through**.
+  _and_ optionally replace behaviour. By default it **calls through**.
 - Behaviour controls: `.mockReturnValue`, `.mockResolvedValue`,
   `.mockResolvedValueOnce` (queue per-call results), `.mockRejectedValue`
   (simulate failure), `.mockImplementation` (custom body).
@@ -129,9 +133,9 @@ Common matchers used throughout the suite:
 vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
 // ...
 await vi.advanceTimersByTimeAsync(1000); // move the clock and flush microtasks
-await vi.runAllTimersAsync();            // drain every pending timer
+await vi.runAllTimersAsync(); // drain every pending timer
 // ...
-vi.useRealTimers();                      // in afterEach
+vi.useRealTimers(); // in afterEach
 ```
 
 The `*Async` variants also flush the promise microtasks a stream queues along
@@ -148,8 +152,10 @@ for the thing under test:
 
 ```ts
 TestBed.configureTestingModule({
-  imports: [Counter],   // standalone components are IMPORTED
-  providers: [/* services, provideHttpClient(), provideRouter(), ... */],
+  imports: [Counter], // standalone components are IMPORTED
+  providers: [
+    /* services, provideHttpClient(), provideRouter(), ... */
+  ],
 });
 
 const fixture = TestBed.createComponent(Counter);
@@ -159,9 +165,9 @@ const fixture = TestBed.createComponent(Counter);
 
 ```ts
 const fixture = TestBed.createComponent(Counter);
-const debugElement = fixture.debugElement;         // query the template
+const debugElement = fixture.debugElement; // query the template
 const componentInstance = fixture.componentInstance; // the class instance
-await fixture.whenStable();                         // wait for the render
+await fixture.whenStable(); // wait for the render
 ```
 
 - **`fixture`** wraps the created component and its host element.
@@ -177,9 +183,9 @@ Always query by a stable hook, never by tag or styling class:
 import { By } from '@angular/platform-browser';
 
 const count = debugElement.query(By.css('[data-testid="count"]'));
-count.nativeElement.textContent;      // read rendered text
-count.properties['value'];            // type-safe property read (vs. casting nativeElement)
-count.triggerEventHandler('click');   // fire a bound handler directly
+count.nativeElement.textContent; // read rendered text
+count.properties['value']; // type-safe property read (vs. casting nativeElement)
+count.triggerEventHandler('click'); // fire a bound handler directly
 ```
 
 For elements added/removed by `@if`, **re-query on demand** (wrap the query in a
@@ -196,7 +202,7 @@ render** before asserting on the DOM:
 
 ```ts
 incrementButton.nativeElement.click();
-await fixture.whenStable();            // NOT fixture.detectChanges()
+await fixture.whenStable(); // NOT fixture.detectChanges()
 expect(componentInstance.count()).toBe(1);
 expect(count.nativeElement.textContent).toContain('Count: 1');
 ```
@@ -204,31 +210,31 @@ expect(count.nativeElement.textContent).toContain('Count: 1');
 Forgetting `await fixture.whenStable()` is the classic zoneless flake — the
 signal updates but the DOM you assert on hasn't re-rendered yet.
 
-### When you *still* need `fixture.detectChanges()` in zoneless
+### When you _still_ need `fixture.detectChanges()` in zoneless
 
 Zoneless changes **what triggers** change detection automatically — it does not
 remove change detection. `await fixture.whenStable()` is the right **default**,
 but `detectChanges()` is still the correct tool in a handful of cases:
 
-| Situation | Prefer | Why |
-| --- | --- | --- |
-| After a signal write or user interaction | `await fixture.whenStable()` | The signal marks the component dirty and the scheduler auto-runs CD; awaiting lets it complete. |
-| Initial render in an **async** test | `await fixture.whenStable()` | `createComponent` schedules the first CD; awaiting flushes it. |
-| Initial render in a **strictly synchronous** test | `fixture.detectChanges()` | `createComponent` does **not** render on its own; this forces the first pass without `await`. |
-| Mutating a **non-signal** field directly | `fixture.detectChanges()` | Plain property writes don't notify the scheduler, so nothing is scheduled. |
-| Precise pre-async / lifecycle-timing assertions | `fixture.detectChanges()` | Synchronous and deterministic; runs `ngOnInit`/`ngDoCheck` at a known point instead of after microtasks/timers drain. |
-| Running CD **without** re-checking lifecycle hooks | `fixture.detectChanges(false)` | No `whenStable()` equivalent for skipping the checkNoChanges/lifecycle pass. |
+| Situation                                          | Prefer                         | Why                                                                                                                   |
+| -------------------------------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| After a signal write or user interaction           | `await fixture.whenStable()`   | The signal marks the component dirty and the scheduler auto-runs CD; awaiting lets it complete.                       |
+| Initial render in an **async** test                | `await fixture.whenStable()`   | `createComponent` schedules the first CD; awaiting flushes it.                                                        |
+| Initial render in a **strictly synchronous** test  | `fixture.detectChanges()`      | `createComponent` does **not** render on its own; this forces the first pass without `await`.                         |
+| Mutating a **non-signal** field directly           | `fixture.detectChanges()`      | Plain property writes don't notify the scheduler, so nothing is scheduled.                                            |
+| Precise pre-async / lifecycle-timing assertions    | `fixture.detectChanges()`      | Synchronous and deterministic; runs `ngOnInit`/`ngDoCheck` at a known point instead of after microtasks/timers drain. |
+| Running CD **without** re-checking lifecycle hooks | `fixture.detectChanges(false)` | No `whenStable()` equivalent for skipping the checkNoChanges/lifecycle pass.                                          |
 
 The key mental model: zoneless auto-CD is driven by **signals**, bound events,
 and `markForCheck`. If a test reaches in and mutates a plain field, force CD
 yourself:
 
 ```ts
-component.title = 'changed';   // plain property — no signal, nothing scheduled
-fixture.detectChanges();       // required to re-render
+component.title = 'changed'; // plain property — no signal, nothing scheduled
+fixture.detectChanges(); // required to re-render
 
 component.title.set('changed'); // a signal write instead…
-await fixture.whenStable();      // …schedules CD, so await it
+await fixture.whenStable(); // …schedules CD, so await it
 ```
 
 > **Rule of thumb:** default to `await fixture.whenStable()`. Reach for
@@ -239,7 +245,7 @@ await fixture.whenStable();      // …schedules CD, so await it
 
 ## 4. Recipes by artifact type
 
-The right tool depends on *what* you're testing. This repo has a worked example
+The right tool depends on _what_ you're testing. This repo has a worked example
 for each category under `src/app/test-examples/`.
 
 ### 4.1 Component with signal state — `counter`
@@ -259,17 +265,17 @@ const emittedGreetings: string[] = [];
 
 fixture = TestBed.createComponent(Greeting, {
   bindings: [
-    inputBinding('name', name),                                  // like [name]="name()"
+    inputBinding('name', name), // like [name]="name()"
     outputBinding<string>('greeted', (v) => emittedGreetings.push(v)), // like (greeted)="..."
   ],
 });
 
-name.set('John Dough');       // change the input like a parent would
+name.set('John Dough'); // change the input like a parent would
 await fixture.whenStable();
 ```
 
 Collecting emissions into an **array** (rather than a spy) lets you assert both
-the payloads *and* the count/order.
+the payloads _and_ the count/order.
 
 ### 4.3 Attribute directive — `highlight-directive`
 
@@ -279,7 +285,7 @@ read the directive instance via the element injector.
 
 ### 4.4 Pipe — `title-case-pipe`
 
-A pipe is *just a class* with a `transform` method. **No `TestBed`, no fixture,
+A pipe is _just a class_ with a `transform` method. **No `TestBed`, no fixture,
 no DOM** — instantiate with `new` and call it like a function. These are the
 fastest tests you can write:
 
@@ -301,7 +307,10 @@ const service = TestBed.inject(CartService);
 TestBed.configureTestingModule({
   providers: [
     CartService,
-    { provide: DiscountService, useValue: { discountFor: vi.fn().mockReturnValue(0.1) } },
+    {
+      provide: DiscountService,
+      useValue: { discountFor: vi.fn().mockReturnValue(0.1) },
+    },
   ],
 });
 ```
@@ -323,8 +332,8 @@ with the testing one — **order matters**:
 ```ts
 providers: [
   provideHttpClient(),
-  provideHttpClientTesting(),   // MUST come after — it overrides the real handler
-]
+  provideHttpClientTesting(), // MUST come after — it overrides the real handler
+];
 const httpTesting = TestBed.inject(HttpTestingController);
 ```
 
@@ -333,11 +342,11 @@ Drive and answer requests by hand:
 ```ts
 const req = httpTesting.expectOne(`${UserService.BASE_URL}/angular`);
 expect(req.request.method).toBe('GET');
-req.flush(fakeUser);                                    // success response
+req.flush(fakeUser); // success response
 // req.flush('Not Found', { status: 404, statusText: 'Not Found' }); // error response
 // req.error(new ProgressEvent('network error'));       // transport failure (status 0)
 
-httpTesting.expectNone(() => true);                     // assert nothing was sent
+httpTesting.expectNone(() => true); // assert nothing was sent
 ```
 
 Run `httpTesting.verify()` in `afterEach` — it fails the test if any request was
@@ -387,7 +396,7 @@ casting `any`.
 > **Gotcha:** a `not.toHaveBeenCalled()` assertion is only valid if the spy
 > exists **before** the code path could run. To assert a child's service was
 > never touched, spy on the prototype in `beforeEach`
-> (`vi.spyOn(ActivityService.prototype, 'loadRecentActivity')`) *before*
+> (`vi.spyOn(ActivityService.prototype, 'loadRecentActivity')`) _before_
 > `createComponent`.
 
 ### 4.12 Component harness — `component-harness`
@@ -404,13 +413,16 @@ export class QuantityStepperHarness extends ComponentHarness {
   // Find a specific instance among many, by label (string or RegExp).
   static with(options: QuantityStepperHarnessFilters = {}) {
     return new HarnessPredicate(QuantityStepperHarness, options).addOption(
-      'label', options.label,
+      'label',
+      options.label,
       (h, label) => HarnessPredicate.stringMatches(h.getLabel(), label),
     );
   }
 
   private readonly value = this.locatorFor('[data-testid="value"]');
-  async getValue() { return Number(await (await this.value()).text()); }
+  async getValue() {
+    return Number(await (await this.value()).text());
+  }
 }
 ```
 
@@ -427,7 +439,7 @@ const stepper = await loader.getHarness(
 await stepper.increment(2);
 expect(await stepper.getValue()).toBe(3);
 
-await loader.getAllHarnesses(QuantityStepperHarness);            // every instance
+await loader.getAllHarnesses(QuantityStepperHarness); // every instance
 await loader.getHarnessOrNull(QuantityStepperHarness.with({ label: 'Pets' })); // null
 ```
 
@@ -469,35 +481,47 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 // Angular component testing
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { DebugElement, inputBinding, outputBinding, signal } from '@angular/core';
+import {
+  DebugElement,
+  inputBinding,
+  outputBinding,
+  signal,
+} from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 // HTTP
 import { provideHttpClient } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 
 // Router
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 
 // Component harnesses (Angular CDK)
-import { ComponentHarness, HarnessPredicate, HarnessLoader } from '@angular/cdk/testing';
+import {
+  ComponentHarness,
+  HarnessPredicate,
+  HarnessLoader,
+} from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 ```
 
-| I want to… | Reach for | Example |
-| --- | --- | --- |
-| Test rendered state after a click | `whenStable()` + `By.css` | `counter` |
-| Feed an input / capture an output | `inputBinding` / `outputBinding` | `greeting` |
-| Test an attribute directive | test host + `By.directive` | `highlight-directive` |
-| Test a pipe | `new Pipe()` | `title-case-pipe` |
-| Test a service | `TestBed.inject` | `cart`, `service-injection` |
-| Fake HTTP | `HttpTestingController` + `verify()` | `http-user`, `cart` |
-| Control time / RxJS delays | `vi.useFakeTimers` + `*Async` | `async-quote` |
-| Stub/observe collaborators | `vi.spyOn` / `vi.fn` | `spy-feature-toggle` |
-| Test navigation | `RouterTestingHarness` | `router-navigation` |
-| Stub a heavy child | `TestBed.overrideComponent` | `nested-components` |
-| Wrap a component in a reusable test API | `ComponentHarness` + `TestbedHarnessEnvironment` | `component-harness` |
+| I want to…                              | Reach for                                        | Example                     |
+| --------------------------------------- | ------------------------------------------------ | --------------------------- |
+| Test rendered state after a click       | `whenStable()` + `By.css`                        | `counter`                   |
+| Feed an input / capture an output       | `inputBinding` / `outputBinding`                 | `greeting`                  |
+| Test an attribute directive             | test host + `By.directive`                       | `highlight-directive`       |
+| Test a pipe                             | `new Pipe()`                                     | `title-case-pipe`           |
+| Test a service                          | `TestBed.inject`                                 | `cart`, `service-injection` |
+| Fake HTTP                               | `HttpTestingController` + `verify()`             | `http-user`, `cart`         |
+| Control time / RxJS delays              | `vi.useFakeTimers` + `*Async`                    | `async-quote`               |
+| Stub/observe collaborators              | `vi.spyOn` / `vi.fn`                             | `spy-feature-toggle`        |
+| Test navigation                         | `RouterTestingHarness`                           | `router-navigation`         |
+| Stub a heavy child                      | `TestBed.overrideComponent`                      | `nested-components`         |
+| Wrap a component in a reusable test API | `ComponentHarness` + `TestbedHarnessEnvironment` | `component-harness`         |
 
 ---
 
@@ -506,4 +530,3 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 - Angular testing guide — https://angular.dev/guide/testing
 - Vitest guide — https://vitest.dev/guide/
 - `docs/test-examples-review.md` — a critical review of each spec in this repo.
-

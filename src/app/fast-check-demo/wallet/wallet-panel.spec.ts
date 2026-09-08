@@ -96,4 +96,3 @@ describe('WalletPanel', () => {
     expect(query('empty')).toBeTruthy();
   });
 });
-

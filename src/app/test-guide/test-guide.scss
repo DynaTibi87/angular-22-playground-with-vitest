@@ -97,7 +97,18 @@
 
 /* Let the gap own the spacing: drop the browser's default block margins. */
 .widget__body
-  :is(app-counter, app-greeting, app-name-field, app-quote-panel, app-message-panel, app-user-panel, app-feature-toggle-panel, app-nav-panel, app-cart-panel, app-profile-card)
+  :is(
+    app-counter,
+    app-greeting,
+    app-name-field,
+    app-quote-panel,
+    app-message-panel,
+    app-user-panel,
+    app-feature-toggle-panel,
+    app-nav-panel,
+    app-cart-panel,
+    app-profile-card
+  )
   :is(p, h3, dt, dd, label) {
   margin: 0;
 }
@@ -221,7 +232,11 @@
 
 /* Nested-component wrappers get a matching column rhythm. */
 .widget__body
-  :is([data-testid='profile-card'], [data-testid='user-badge'], [data-testid='activity-feed']) {
+  :is(
+    [data-testid='profile-card'],
+    [data-testid='user-badge'],
+    [data-testid='activity-feed']
+  ) {
   display: flex;
   flex-direction: column;
   gap: var(--space-2); // 8
@@ -315,4 +330,3 @@
   background: rgba(255, 255, 255, 0.6);
   font-size: 0.78rem;
 }
-

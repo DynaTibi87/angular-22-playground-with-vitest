@@ -18,10 +18,7 @@ describe('TruncatePanel', () => {
   const text = (testId: string): string =>
     query(testId).nativeElement.textContent.trim();
 
-  const setInput = async (
-    testId: string,
-    value: string,
-  ): Promise<void> => {
+  const setInput = async (testId: string, value: string): Promise<void> => {
     const el = query(testId).nativeElement as
       | HTMLInputElement
       | HTMLTextAreaElement;
@@ -64,4 +61,3 @@ describe('TruncatePanel', () => {
     expect(text('result')).toBe('abc [more]');
   });
 });
-

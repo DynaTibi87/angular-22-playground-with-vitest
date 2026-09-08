@@ -25,9 +25,9 @@ describe('FastCheckDemo', () => {
   });
 
   it('renders the page heading', () => {
-    expect(debugElement.query(By.css('h1')).nativeElement.textContent).toContain(
-      'Property-based testing',
-    );
+    expect(
+      debugElement.query(By.css('h1')).nativeElement.textContent,
+    ).toContain('Property-based testing');
   });
 
   it('lists one item per declared invariant', () => {
@@ -41,4 +41,3 @@ describe('FastCheckDemo', () => {
     expect(debugElement.query(By.css('app-wallet-panel'))).toBeTruthy();
   });
 });
-

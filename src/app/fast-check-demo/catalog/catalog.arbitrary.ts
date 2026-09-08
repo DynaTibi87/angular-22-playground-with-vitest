@@ -72,4 +72,3 @@ const catalog = fc.letrec<{
 // (a realistic catalog), while `catalogNodeArbitrary` may be a bare product too.
 export const catalogNodeArbitrary = catalog.catalogNode;
 export const catalogArbitrary = catalog.category;
-

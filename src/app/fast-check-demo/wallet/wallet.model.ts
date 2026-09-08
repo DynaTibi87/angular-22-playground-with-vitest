@@ -36,4 +36,3 @@ export const initialWalletState: WalletState = {
   transactions: [],
   error: null,
 };
-

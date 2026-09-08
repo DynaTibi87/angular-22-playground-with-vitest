@@ -22,11 +22,19 @@ import { CatalogNode, Category } from './catalog.model';
     <ng-template #nodeTpl let-node>
       @if (node.type === 'product') {
         <span class="catalog-node catalog-node--product" data-testid="product">
-          <span class="catalog-node__label">{{ node.title || '(untitled)' }}</span>
-          <span class="catalog-node__price">{{ formatCents(node.priceCents) }}</span>
+          <span class="catalog-node__label">{{
+            node.title || '(untitled)'
+          }}</span>
+          <span class="catalog-node__price">{{
+            formatCents(node.priceCents)
+          }}</span>
         </span>
       } @else {
-        <details class="catalog-node catalog-node--category" data-testid="category" open>
+        <details
+          class="catalog-node catalog-node--category"
+          data-testid="category"
+          open
+        >
           <summary class="catalog-node__label">
             {{ node.name }}
             <span class="catalog-node__badge">{{ node.items.length }}</span>
@@ -43,7 +51,9 @@ import { CatalogNode, Category } from './catalog.model';
               }
             </ul>
           } @else {
-            <p class="catalog-node__empty" data-testid="empty-category">Empty category</p>
+            <p class="catalog-node__empty" data-testid="empty-category">
+              Empty category
+            </p>
           }
         </details>
       }
@@ -82,11 +92,26 @@ export class CatalogNodeView {
     </div>
 
     <dl class="catalog__stats" data-testid="stats">
-      <div><dt>Products</dt><dd data-testid="stat-products">{{ productCount() }}</dd></div>
-      <div><dt>Categories</dt><dd data-testid="stat-categories">{{ categoryCount() }}</dd></div>
-      <div><dt>Nodes</dt><dd data-testid="stat-nodes">{{ nodeCount() }}</dd></div>
-      <div><dt>Depth</dt><dd data-testid="stat-depth">{{ depth() }}</dd></div>
-      <div><dt>Total value</dt><dd data-testid="stat-total">{{ formattedTotal() }}</dd></div>
+      <div>
+        <dt>Products</dt>
+        <dd data-testid="stat-products">{{ productCount() }}</dd>
+      </div>
+      <div>
+        <dt>Categories</dt>
+        <dd data-testid="stat-categories">{{ categoryCount() }}</dd>
+      </div>
+      <div>
+        <dt>Nodes</dt>
+        <dd data-testid="stat-nodes">{{ nodeCount() }}</dd>
+      </div>
+      <div>
+        <dt>Depth</dt>
+        <dd data-testid="stat-depth">{{ depth() }}</dd>
+      </div>
+      <div>
+        <dt>Total value</dt>
+        <dd data-testid="stat-total">{{ formattedTotal() }}</dd>
+      </div>
     </dl>
 
     <div class="catalog__tree" data-testid="tree">
@@ -101,7 +126,9 @@ export class CatalogPanel {
 
   // Derived stats: exactly the pure functions the property tests exercise.
   protected readonly productCount = computed(() => countProducts(this.tree()));
-  protected readonly categoryCount = computed(() => countCategories(this.tree()));
+  protected readonly categoryCount = computed(() =>
+    countCategories(this.tree()),
+  );
   protected readonly nodeCount = computed(() => countNodes(this.tree()));
   protected readonly depth = computed(() => maxDepth(this.tree()));
   protected readonly formattedTotal = computed(
@@ -117,6 +144,3 @@ export class CatalogPanel {
 function sampleCatalog(): Category {
   return fc.sample(catalogArbitrary, 1)[0];
 }
-
-
-

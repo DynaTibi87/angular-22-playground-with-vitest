@@ -26,7 +26,12 @@ import {
 // Arbitraries
 // ---------------------------------------------------------------------------
 
-const KNOWN_STATUSES: OrderStatus[] = ['PENDING', 'PAID', 'SHIPPED', 'CANCELLED'];
+const KNOWN_STATUSES: OrderStatus[] = [
+  'PENDING',
+  'PAID',
+  'SHIPPED',
+  'CANCELLED',
+];
 const KNOWN_TIERS: LoyaltyTier[] = ['BRONZE', 'SILVER', 'GOLD'];
 const KNOWN_CURRENCIES: CurrencyCode[] = ['USD', 'EUR', 'GBP'];
 
@@ -44,10 +49,7 @@ const anyLineItem = fc.record({
     fc.integer({ min: -1000, max: 500_000 }),
     fc.constant(Number.NaN),
   ),
-  discount_pct: fc.oneof(
-    fc.integer({ min: -50, max: 150 }),
-    fc.constant(null),
-  ),
+  discount_pct: fc.oneof(fc.integer({ min: -50, max: 150 }), fc.constant(null)),
 });
 
 const anyOrder: fc.Arbitrary<BackendOrder> = fc.record({
@@ -60,11 +62,13 @@ const anyOrder: fc.Arbitrary<BackendOrder> = fc.record({
   line_items: fc.array(anyLineItem, { maxLength: 8 }),
   currency: fc.oneof(fc.constantFrom(...KNOWN_CURRENCIES), fc.string()),
   placed_at: fc.oneof(
-    fc.date({
-      min: new Date('2000-01-01T00:00:00.000Z'),
-      max: new Date('2099-12-31T23:59:59.999Z'),
-      noInvalidDate: true,
-    }).map((d) => d.toISOString()),
+    fc
+      .date({
+        min: new Date('2000-01-01T00:00:00.000Z'),
+        max: new Date('2099-12-31T23:59:59.999Z'),
+        noInvalidDate: true,
+      })
+      .map((d) => d.toISOString()),
     fc.constant(null),
     fc.constant('not-a-date'),
   ),
@@ -128,13 +132,16 @@ function parseMoney(label: string): number {
 }
 
 describe('adaptOrder — money folding', () => {
-  test.prop([anyOrder])('the item count equals the summed quantities', (order) => {
-    const expected = order.line_items.reduce(
-      (sum, item) => sum + normalizeQuantity(item.quantity),
-      0,
-    );
-    expect(adaptOrder(order).itemCount).toBe(expected);
-  });
+  test.prop([anyOrder])(
+    'the item count equals the summed quantities',
+    (order) => {
+      const expected = order.line_items.reduce(
+        (sum, item) => sum + normalizeQuantity(item.quantity),
+        0,
+      );
+      expect(adaptOrder(order).itemCount).toBe(expected);
+    },
+  );
 
   test.prop([anyOrder])(
     'total always equals subtotal minus discount',
@@ -146,12 +153,15 @@ describe('adaptOrder — money folding', () => {
     },
   );
 
-  test.prop([anyOrder])('subtotal, discount and total are never negative', (order) => {
-    const ui = adaptOrder(order);
-    expect(parseMoney(ui.subtotalLabel)).toBeGreaterThanOrEqual(0);
-    expect(parseMoney(ui.discountLabel)).toBeGreaterThanOrEqual(0);
-    expect(parseMoney(ui.totalLabel)).toBeGreaterThanOrEqual(0);
-  });
+  test.prop([anyOrder])(
+    'subtotal, discount and total are never negative',
+    (order) => {
+      const ui = adaptOrder(order);
+      expect(parseMoney(ui.subtotalLabel)).toBeGreaterThanOrEqual(0);
+      expect(parseMoney(ui.discountLabel)).toBeGreaterThanOrEqual(0);
+      expect(parseMoney(ui.totalLabel)).toBeGreaterThanOrEqual(0);
+    },
+  );
 
   test.prop([anyOrder])('the discount never exceeds the subtotal', (order) => {
     const ui = adaptOrder(order);
@@ -235,16 +245,19 @@ describe('order helpers', () => {
     expect(normalizeDiscountPct(null)).toBe(0);
   });
 
-  test.prop([fc.integer()])('formatMoney always renders two decimals', (cents) => {
-    expect(formatMoney(cents, '$')).toMatch(/^-?\$\d+\.\d{2}$/);
-  });
+  test.prop([fc.integer()])(
+    'formatMoney always renders two decimals',
+    (cents) => {
+      expect(formatMoney(cents, '$')).toMatch(/^-?\$\d+\.\d{2}$/);
+    },
+  );
 
-  test.prop([fc.double()])('toNonNegativeInt yields a non-negative integer', (n) => {
-    const result = toNonNegativeInt(n);
-    expect(Number.isInteger(result)).toBe(true);
-    expect(result).toBeGreaterThanOrEqual(0);
-  });
+  test.prop([fc.double()])(
+    'toNonNegativeInt yields a non-negative integer',
+    (n) => {
+      const result = toNonNegativeInt(n);
+      expect(Number.isInteger(result)).toBe(true);
+      expect(result).toBeGreaterThanOrEqual(0);
+    },
+  );
 });
-
-
-

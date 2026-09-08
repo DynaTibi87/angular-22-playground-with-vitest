@@ -2,7 +2,10 @@
   <h1>Property-based testing with fast-check</h1>
   <p>
     A small NgRx-backed Wallet whose pure logic, reducer and selectors are
-    verified with <a href="https://fast-check.dev" target="_blank" rel="noreferrer">fast-check</a>
+    verified with
+    <a href="https://fast-check.dev" target="_blank" rel="noreferrer"
+      >fast-check</a
+    >
     running on Vitest.
   </p>
 </header>
@@ -28,7 +31,7 @@
     <div class="widget__body">
       <ul data-testid="invariants" class="fc-invariants">
         @for (invariant of invariants; track invariant) {
-          <li>{{ invariant }}</li>
+        <li>{{ invariant }}</li>
         }
       </ul>
     </div>
@@ -57,4 +60,3 @@
     </div>
   </article>
 </section>
-

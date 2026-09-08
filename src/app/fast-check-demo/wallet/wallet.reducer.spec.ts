@@ -22,7 +22,9 @@ const anyAction = fc.oneof(
 );
 
 // Folds a whole action list through the reducer, starting from empty.
-function run(actions: ReturnType<typeof anyAction.generate>['value'][]): WalletState {
+function run(
+  actions: ReturnType<typeof anyAction.generate>['value'][],
+): WalletState {
   return actions.reduce(walletReducer, initialWalletState);
 }
 
@@ -60,9 +62,9 @@ describe('walletReducer', () => {
           expect(next.transactions.length).toBeGreaterThanOrEqual(
             previous.transactions.length,
           );
-          expect(next.transactions.slice(0, previous.transactions.length)).toEqual(
-            previous.transactions,
-          );
+          expect(
+            next.transactions.slice(0, previous.transactions.length),
+          ).toEqual(previous.transactions);
         }
         previous = next;
       }
@@ -73,7 +75,9 @@ describe('walletReducer', () => {
     'reset always returns the initial state, from anywhere',
     (actions) => {
       const state = run(actions);
-      expect(walletReducer(state, WalletActions.reset())).toBe(initialWalletState);
+      expect(walletReducer(state, WalletActions.reset())).toBe(
+        initialWalletState,
+      );
     },
   );
 
@@ -121,7 +125,10 @@ describe('walletReducer', () => {
       initialWalletState,
       WalletActions.deposit({ amount: 1000 }),
     );
-    const state = walletReducer(funded, WalletActions.withdraw({ amount: 400 }));
+    const state = walletReducer(
+      funded,
+      WalletActions.withdraw({ amount: 400 }),
+    );
 
     expect(state.balance).toBe(600);
     expect(state.transactions[state.transactions.length - 1]).toEqual({
@@ -136,7 +143,10 @@ describe('walletReducer', () => {
       initialWalletState,
       WalletActions.deposit({ amount: 300 }),
     );
-    const state = walletReducer(funded, WalletActions.withdraw({ amount: 1000 }));
+    const state = walletReducer(
+      funded,
+      WalletActions.withdraw({ amount: 1000 }),
+    );
 
     expect(state.balance).toBe(300);
     expect(state.transactions).toHaveLength(1); // no withdrawal recorded
@@ -167,4 +177,3 @@ describe('walletReducer', () => {
     expect(state.transactions).toBe(errored.transactions);
   });
 });
-

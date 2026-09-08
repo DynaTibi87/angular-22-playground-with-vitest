@@ -54,6 +54,10 @@ export function maxDepth(node: CatalogNode): number {
   if (node.type === 'product') {
     return 1;
   }
-  return node.items.reduce((deepest, child) => Math.max(deepest, maxDepth(child)), 0) + 1;
+  return (
+    node.items.reduce(
+      (deepest, child) => Math.max(deepest, maxDepth(child)),
+      0,
+    ) + 1
+  );
 }
-

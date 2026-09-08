@@ -18,4 +18,3 @@ export const WalletActions = createActionGroup({
     ClearError: emptyProps(),
   },
 });
-

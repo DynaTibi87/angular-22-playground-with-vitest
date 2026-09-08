@@ -3,14 +3,14 @@
 A record of the real bugs and edge cases that property-based tests caught while
 building the `/adapter` route (`src/app/adapter-demo/`). It complements the
 [property-based testing guide](./property-based-testing-guide.md): where that
-document explains *how* to write properties, this one shows *what they found*.
+document explains _how_ to write properties, this one shows _what they found_.
 
 - **Scope:** two pure backend → UI adapters and their specs
   - `workspace/` — a flat workspace payload with multi-property (status × role) logic
   - `order/` — a nested order payload (customer object + array of line items) with computed money totals
 - **Stack:** Angular 22 (zoneless, signals) + Vitest + `@fast-check/vitest`.
 - **Headline:** every finding below was found automatically by fast-check on the
-  *first* run, and none of them would have been caught by the hand-picked
+  _first_ run, and none of them would have been caught by the hand-picked
   example tests we wrote alongside.
 
 ---
@@ -20,7 +20,7 @@ document explains *how* to write properties, this one shows *what they found*.
 An adapter is a **total, deterministic function** `backend → ui`. That purity is
 exactly what property-based testing thrives on: we state an invariant once
 ("the total can never be negative") and let fast-check throw hundreds of
-realistic *and* hostile payloads at it, shrinking any failure to a minimal
+realistic _and_ hostile payloads at it, shrinking any failure to a minimal
 counterexample with a replayable `seed`.
 
 ---
@@ -120,7 +120,7 @@ With `100_000 × 100_000_000 = 1e13` per line and ≤ 8 lines (`8e13`), all sums
 stay well under `9e15` and the money invariants hold exactly.
 
 **Takeaway:** money math in floating-point JS is only exact within the
-safe-integer window. Property tests make the boundary *loud*; without them this
+safe-integer window. Property tests make the boundary _loud_; without them this
 would surface as a rare, near-unreproducible production discrepancy. This is the
 same lesson the Wallet feature encodes by working in whole cents.
 
@@ -179,4 +179,3 @@ Run the suite with:
 ```bash
 npm test   # nx test → vitest run
 ```
-
